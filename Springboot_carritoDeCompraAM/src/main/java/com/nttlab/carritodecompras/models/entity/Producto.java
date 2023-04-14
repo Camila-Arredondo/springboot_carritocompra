@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "productos")
@@ -22,6 +23,8 @@ public class Producto implements Serializable {
 	public String descripcion;
 	public String categoria;
 	public Integer precio;
+	@Transient
+	public double cantidad;
 	
 	/*@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name="carrito_id", nullable = false)
@@ -81,7 +84,13 @@ public class Producto implements Serializable {
 	public void setPrecio(Integer precio) {
 		this.precio = precio;
 	}
+	public double getCantidad() {
+		return cantidad;
+	}
 
+	public void setCantidad(double cantidad) {
+		this.cantidad = cantidad;
+	}
 	@Override
 	public String toString() {
 

@@ -18,11 +18,12 @@
 							<th>Categoria</th>
 							<th>Descripcion</th>
 							<th>Precio</th>
+							<th>Acciones</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="a: ${productos}">
-							<td th:text="${a.id}"></td>
+						
 							<td th:text="${a.nombre}"></td>
 							<td th:text="${a.categoria}"></td>
 							<td th:text="${a.descripcion}"></td>
@@ -33,17 +34,19 @@
 										<i class="fa-solid fa-trash-can"></i>
 									</span>
 								</a>
-								<a class="btn btn-outline-success" th:href="@{/carrito/agregar/{id}(id=${a.id})}" >
-									<span class="fs-5">
-										<i class="fa-solid fa-cart-plus"></i>
-									</span>
-								</a>
-										<a class="btn btn-outline-success" th:href="@{/carrito/quitar/{id}(id=${a.id})}" >
+								
+								<a class="btn btn-outline-success" th:href="@{/carrito/quitar/{id}/productos(id=${a.id})}" >
 									<span class="fs-5">
 										<i class="fa-solid fa-square-minus"></i>
 									</span>
 								</a>
-											<a class="btn btn-outline-success" th:href="@{/carrito/eliminar/{id}(id=${a.id})}" >
+								<span th:text="${a.cantidad}"></span>
+								<a class="btn btn-outline-success" th:href="@{/carrito/agregar/{id}/productos(id=${a.id})}" >
+									<span class="fs-5">
+										<i class="fa-solid fa-cart-plus"></i>
+									</span>
+								</a>
+								<a class="btn btn-outline-success" th:href="@{/carrito/eliminar/{id}/productos(id=${a.id})}" >
 									<span class="fs-5">
 										<i class="fa-solid fa-eraser"></i>
 									</span>

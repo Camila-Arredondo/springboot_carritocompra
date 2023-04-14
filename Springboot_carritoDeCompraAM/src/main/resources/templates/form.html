@@ -7,71 +7,32 @@
 
 	<div class="container mt-4">
 	
-		<div th:classappend="'alert-' + (${clase != null} ? ${clase} : info) "
-			th:if="${mensaje != null}" th:text="${mensaje}" class="alert alert-dismissible fade show">		
-			 <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-		</div>
-		
-		<!-- 
-		<div class="alert alert-danger py-5" th:object="${alumno}" th:remove="tag">
-			<ul th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
-				<li th:each="err: ${#fields.errors('*')}" th:text="${err}"></li>
-			</ul>			
-		</div>
-		 -->
-	
-		<form th:action="@{/form}" th:object="${alumno}" method="POST">
-			<div class="card">
+<div class="container mt-4">
+		<div class="col-md-6 shadow border mx-auto">
+			<div class="card border-primary text-center">
 				<div class="card-header">
-					<h4 class="card-title" th:text="${titulo}"></h4>
+					<h3 class="card-title">Crear Usuario Nuevo</h3>
 				</div>
-				<div class=card-body>
-					<div class="mb-3 row">
-						<label for="rut" class="col-sm-2 col-form-label">Rut</label>
-						<div class="col-sm-10">
-							<input th:field="*{rut}" type="text" class="form-control" placeholder="Ej. 12345678-9">
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('rut')}" th:errors="*{rut}"></small>
+				<div class="card-body">
+				
+					<form th:action="@{/registrar/crearusuario}" method="post">
+						<div class="form-group mb-3 col-sm">
+							<input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus/>
 						</div>
-					</div>
-					<div class="mb-3 row">
-						<label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
-						<div class="col-sm-10">
-							<input th:field="*{nombre}"  type="text" class="form-control">
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
+						<div class="form-group mb-3 col-sm">
+							<input type="password" name="password" id="password" class="form-control" placeholder="Password" required />
 						</div>
-					</div>
-					<div class="mb-3 row">
-						<label for="apellido" class="col-sm-2 col-form-label">Apellido</label>
-						<div class="col-sm-10">
-							<input th:field="*{apellido}" type="text" class="form-control">
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></small>
+						<div class="form-group mb-3 col-sm">
+							<input type="submit" value="Crear Usuario" class="btn btn-primary btn-lg btn-block" />
 						</div>
-					</div>
-					<div class="mb-3 row">
-						<label for="email" class="col-sm-2 col-form-label">Email</label>
-						<div class="col-sm-10">
-							<input th:field="*{email}" type="text" class="form-control">
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
-						</div>
-					</div>
-					<div class="mb-3 row">
-						<label for="fecha_nacimiento" class="col-sm-2 col-form-label">Fecha Nacimiento</label>
-						<div class="col-sm-10">
-							<input th:field="*{fechaNacimiento}" type="date" class="form-control">
-							<small class="form-text text-danger" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></small>
-						</div>
-					</div>
+				</form>
 				</div>
-				<div class="card-footer text-center">
-					<div class="form-group">
-						<input type="submit" value="Guardar" class="btn btn-outline-primary" />
-						<input type="reset" value="Limpiar" class="btn btn-outline-warning" onclick="this.form.reset();" />
-						<a type="button" class="btn btn-outline-secondary" th:href="@{/listar}">Volver</a>
-					</div>
-				</div>	
-			</div>
-			<input type="hidden" th:field="*{id}">
-		</form>
+				</div>
+				</div>
+				</div>
+				
+					
+
 	</div>
 
 	<footer th:replace="layout/layout :: footer"></footer>

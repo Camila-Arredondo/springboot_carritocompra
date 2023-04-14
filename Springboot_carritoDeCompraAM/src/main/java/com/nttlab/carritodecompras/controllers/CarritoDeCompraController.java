@@ -1,9 +1,8 @@
 package com.nttlab.carritodecompras.controllers;
-
+ 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.Authentication;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
+import com.nttlab.carritodecompras.models.entity.Carrito;
+import com.nttlab.carritodecompras.models.entity.Producto;
+import com.nttlab.carritodecompras.models.entity.Usuario;
 import com.nttlab.carritodecompras.models.service.JpaUserDetailService;
 import com.nttlab.carritodecompras.models.service.iCarritoService;
 import com.nttlab.carritodecompras.models.service.iProductoService;
+import com.nttlab.carritodecompras.models.service.iTotalCompraService;
 @Controller
 @RequestMapping("/carrito")
 public class CarritoDeCompraController {
@@ -26,49 +28,84 @@ public class CarritoDeCompraController {
 	private iProductoService productoService;
 	@Autowired
 	private iCarritoService carritoSerice;
+	@Autowired
+	private iTotalCompraService totalcompraService;
+	
 
-	
-	
-	
-	
-	@GetMapping(value = "/agregar/{id}")
-	public String agregarCarrito(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
+	@GetMapping(value = "")
+	public String listCarrito(Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
 		var usuario = userService.findByUsername(user.getUsername());
 		
-		var producto = productoService.findOne(id);
 		
-		carritoSerice.addProduct(producto, usuario);
+		var productosCarrito = carritoSerice.findByUser(usuario);
+		double total = 0;
 		
-		return "redirect:/productos";
+		
+		for(var carrito : productosCarrito) {
+			total += (carrito.getProducto().getPrecio() * carrito.getCantidad());
+		}
+		
+		
+		
+		model.addAttribute("productosCarrito", productosCarrito);
+		model.addAttribute("total", total);
 
-	}
-	@GetMapping(value = "/quitar/{id}")
-	public String quitarProductoCarrito(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-		var usuario = userService.findByUsername(user.getUsername());
-		
-		var producto = productoService.findOne(id);
-		
-		carritoSerice.quitarProducto(producto, usuario);
-		
-		return "redirect:/productos";
+		return "productos/carrito";
 
 	}
 	
-	@GetMapping(value = "/eliminar/{id}")
-	public String eliminarProductoCarrito(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
+	
+	@GetMapping(value = "/agregar/{id}/{redirect}")
+	public String agregarCarrito(@PathVariable(value = "id") Long id,@PathVariable(value = "redirect") String redirect, Model model, RedirectAttributes flash) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+		
+		
+		carritoSerice.addProduct(id, user.getUsername());
+		
+		return "redirect:/"+redirect;
+
+	}
+	@GetMapping(value = "/quitar/{id}/{redirect}")
+	public String quitarProductoCarrito(@PathVariable(value = "id") Long id,@PathVariable(value = "redirect") String redirect, Model model, RedirectAttributes flash) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+		
+		
+		
+		carritoSerice.quitarProducto(id, user.getUsername());
+		
+		return "redirect:/"+redirect;
+
+	}
+	
+	@GetMapping(value = "/eliminar/{id}/{redirect}")
+	public String eliminarProductoCarrito(@PathVariable(value = "id") Long id,@PathVariable(value = "redirect") String redirect, Model model, RedirectAttributes flash) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+		
+
+		carritoSerice.eliminarProducto(id, user.getUsername());
+		
+		return "redirect:/"+redirect;
+
+	}
+	
+	
+	@GetMapping(value = "/vender")
+	public String VenderCarrito(Model model, RedirectAttributes flash) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
 		var usuario = userService.findByUsername(user.getUsername());
 		
-		var producto = productoService.findOne(id);
+		var productosCarrito = carritoSerice.findByUser(usuario);
+
+		totalcompraService.addTotales(productosCarrito);
 		
-		carritoSerice.eliminarProducto(producto, usuario);
 		
-		return "redirect:/productos";
+		return "redirect:/carrito";
 
 	}
 }

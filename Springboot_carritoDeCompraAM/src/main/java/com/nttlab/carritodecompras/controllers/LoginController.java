@@ -3,12 +3,22 @@ import java.security.Principal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.nttlab.carritodecompras.models.entity.Usuario;
+import com.nttlab.carritodecompras.models.service.JpaUserDetailService;
+import com.nttlab.carritodecompras.models.service.iCarritoService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Controller
 public class LoginController {
-	
+	@Autowired
+	private JpaUserDetailService jpauserdetailservice;
+
 	@GetMapping(value="/login")
 	public String login(@RequestParam(value="error",required = false) String error, 
 			@RequestParam(value="logout", required=false) String logout,
@@ -31,6 +41,40 @@ public class LoginController {
 		model.addAttribute("titulo");
 
 		return "login/login";
+		
+	}
+	
+	@GetMapping(value="/registrar")
+	public String Registrar(@RequestParam(value="error",required = false) String error, 
+			@RequestParam(value="logout", required=false) String logout,
+			org.springframework.ui.Model model,
+			Principal principal,
+			RedirectAttributes redirectAttributes) {
+		
+		
+		model.addAttribute("titulo");
+
+		return "form";
+		
+	}
+	
+	@PostMapping(value="/registrar/crearusuario")
+	public String CrearUsuario(@ModelAttribute("usuarioForm") Usuario usuario,
+			org.springframework.ui.Model model,
+			Principal principal,
+			RedirectAttributes redirectAttributes) {
+		
+		System.out.println(usuario.getUsername());
+		System.out.println(usuario.getPassword());
+		
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encodedPassword = passwordEncoder.encode(usuario.getPassword());
+
+		usuario.setPassword(encodedPassword);
+		System.out.println(usuario.getPassword());
+
+		jpauserdetailservice.createUser(usuario);
+		return "redirect:/login";
 		
 	}
 }

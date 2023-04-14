@@ -9,9 +9,9 @@ import com.nttlab.carritodecompras.models.entity.Usuario;
 public interface iCarritoService {
 	public List<Carrito> findByUser(Usuario usuario);
 	
-	public void addProduct(Producto producto, Usuario usuario);
-	public void quitarProducto(Producto producto, Usuario usuario);
-	public void eliminarProducto(Producto producto, Usuario usuario);
+	public void addProduct(long idProducto, String username);
+	public void quitarProducto(long idProducto, String username);
+	public void eliminarProducto(long idProducto, String username);
 
 
 }

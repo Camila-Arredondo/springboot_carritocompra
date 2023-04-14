@@ -35,12 +35,15 @@ public class SpringSecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		http.authorizeHttpRequests()
 			.requestMatchers("/","/css/**","/js/**","/img/**").permitAll()
+			.requestMatchers("/registrar/**").permitAll()
+
 			.requestMatchers("/listar/**").hasAnyRole("USER","ADMIN")
 			.requestMatchers("/nuevo/**").hasRole("ADMIN")
 			.requestMatchers("/form/**").hasRole("ADMIN")
 			.requestMatchers("/editar/**").hasRole("ADMIN")
 			.requestMatchers("/eliminar/**").hasRole("ADMIN")
 			.anyRequest().authenticated()
+
 			.and()
 				.formLogin()
 					.successHandler(logiSuccessHandler)

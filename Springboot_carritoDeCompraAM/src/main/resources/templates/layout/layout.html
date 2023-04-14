@@ -39,17 +39,18 @@
 						<li class="nav-item"><a class="nav-link"
 							sec:authorize="isAuthenticated()" th:href="@{/productos}">Productos</a>
 						</li>
+							<li class="nav-item"><a class="nav-link"
+							sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/productos}">Cliente</a>
+						</li>
+							<li class="nav-item"><a class="nav-link"
+							sec:authorize="isAuthenticated()" th:href="@{/carrito}">Carrito</a>
+						</li>
 					</ul>
 					
 					<ul class="navbar-nav d-flex ms-auto">
 						<li sec:authorize="!isAuthenticated()" class="nav-item">
 							<a th:href="@{/login}" class="btn btn-outline-primary">Sign in</a>
 						</li>
-						
-						<li sec:authorize="!isAuthenticated()" class="nav-item">
-							<a th:href="@{/nuevo}" class="btn btn-outline-primary">Regístrate</a>
-						</li>
-						
 						<li sec:authorize="isAuthenticated()" class="dropdown">
 						  	<button class="btn btn-outline-warning dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
 								<span sec:authentication="name"></span>

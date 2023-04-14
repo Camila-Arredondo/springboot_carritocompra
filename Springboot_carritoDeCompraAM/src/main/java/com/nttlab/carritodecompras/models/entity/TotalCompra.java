@@ -7,33 +7,81 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 
 @Entity
 @Table(name = "total_compra")
-public class TotalCompra implements Serializable {
+public class TotalCompra implements Serializable  {
 	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String numero;
-    private Date fechaCreacion;
-    private double total;
-
+    private Integer numeroOrden;
+    private double cantidad;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+    
+    @ManyToOne
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
+    
+    
     public TotalCompra() {
 		
 	}
 
-	public TotalCompra(Integer id, String numero, Date fechaCreacion, double total) {
+	public TotalCompra(double cantidad, Producto producto, Usuario usuario, Integer numeroOrden) {
 		super();
-		this.id = id;
-		this.numero = numero;
-		this.fechaCreacion = fechaCreacion;
-		this.total = total;
+		this.cantidad = cantidad;
+		this.producto = producto;
+		this.usuario = usuario;
+		this.numeroOrden = numeroOrden;
+	}
+
+	public TotalCompra(double cantidad, Producto producto, Usuario usuario) {
+		super();
+		this.cantidad = cantidad;
+		this.producto = producto;
+		this.usuario = usuario;
 	}
 
 
+
+	public Integer getNumeroOrden() {
+		return numeroOrden;
+	}
+
+	public void setNumeroOrden(Integer numeroOrden) {
+		this.numeroOrden = numeroOrden;
+	}
+
+	public double getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(double cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public Producto getProducto() {
+		return producto;
+	}
+
+	public void setProducto(Producto producto) {
+		this.producto = producto;
+	}
 
 
 	public Integer getId() {
@@ -44,39 +92,9 @@ public class TotalCompra implements Serializable {
 		this.id = id;
 	}
 
-	public String getNumero() {
-		return numero;
-	}
 
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
 
-	public Date getFechaCreacion() {
-		return fechaCreacion;
-	}
 
-	public void setFechaCreacion(Date fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
-	public double getTotal() {
-		return total;
-	}
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-	@Override
-	public String toString() {
-		return "TotalCompra [id=" + id + ", numero=" + numero + ", fechaCreacion=" + fechaCreacion + ", total=" + total
-				+ "]";
-	}
-    
-	private static final long serialVersionUID = 1L;
-    
-    
     
     
     

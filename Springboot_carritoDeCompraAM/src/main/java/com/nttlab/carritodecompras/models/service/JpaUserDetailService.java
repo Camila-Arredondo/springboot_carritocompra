@@ -14,53 +14,69 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.nttlab.carritodecompras.models.dao.iRoleDAO;
 import com.nttlab.carritodecompras.models.dao.iUsuarioDAO;
 import com.nttlab.carritodecompras.models.entity.Role;
 import com.nttlab.carritodecompras.models.entity.Usuario;
 
 import jakarta.transaction.Transactional;
 
+
+
 @Service("jpaUserDetailService")
-public class JpaUserDetailService implements UserDetailsService {
+public class JpaUserDetailService implements UserDetailsService{
 
 	@Autowired
 	private iUsuarioDAO usuarioDao;
-
+	
+	
+	@Autowired
+	private iRoleDAO roleDao;
+	
 	private Logger logger = LoggerFactory.getLogger(JpaUserDetailService.class);
-
+	
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
+		
 		Usuario usuario = usuarioDao.findByUsername(username);
-
-		if (usuario == null) {
+		
+		if(usuario == null) {
 			logger.error("Error de acceso: no existe el usuario [" + username + "]");
 			throw new UsernameNotFoundException("Username: [" + username + "] No existe en nuestros registros.");
 		}
-
+		
 		List<GrantedAuthority> authorities = new ArrayList<>();
-
-		for (Role r : usuario.getRoles()) {
+		
+		for(Role r: usuario.getRoles()) {
 			logger.info("Rol: " + r.getAuthority());
 			authorities.add(new SimpleGrantedAuthority(r.getAuthority()));
 		}
-
-		if (authorities.isEmpty()) {
+		
+		if(authorities.isEmpty()) {
 			logger.error("Error de acceso: usuario [" + username + "] NO tiene roles asignados.");
-			throw new UsernameNotFoundException(
-					"Error de acceso: usuario [" + username + "] NO tiene roles asignados.");
+			throw new UsernameNotFoundException("Error de acceso: usuario [" + username + "] NO tiene roles asignados.");
 		}
+		
 
-		return new User(usuario.getUsername(), usuario.getPassword(), usuario.isActive(), true, true, true,
-				authorities);
+		return new User(usuario.getUsername(), usuario.getPassword(), usuario.isActive(), true, true, true, authorities);
+	}
+	
+	@Transactional
+	public Usuario findByUsername(String username) {
+		
+		return  usuarioDao.findByUsername(username);
+		
 	}
 
 	@Transactional
-	public Usuario findByUsername(String username) {
-
-		return usuarioDao.findByUsername(username);
-
+	public void createUser(Usuario usuario) {
+		usuario.setActive(true);
+		var usuariocreado = usuarioDao.save(usuario);	
+		Role role = new Role("ROLE_USER", usuariocreado);
+		var newrole = roleDao.save(role);
+		
 	}
+
 
 }

@@ -1,6 +1,8 @@
 package com.nttlab.carritodecompras.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nttlab.carritodecompras.models.entity.Producto;
+import com.nttlab.carritodecompras.models.service.JpaUserDetailService;
+import com.nttlab.carritodecompras.models.service.iCarritoService;
 import com.nttlab.carritodecompras.models.service.iProductoService;
 
 @Controller
@@ -17,11 +21,31 @@ public class ProductosController {
 
 	@Autowired
 	private iProductoService productoService;
-
+	@Autowired
+	private JpaUserDetailService userService;
+	@Autowired
+	private iCarritoService carritoSerice;
+	
+	
 	@GetMapping(value = "")
 	public String productoCatálogo(Model model) {
-		model.addAttribute("titulo", "SpringCart");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+		var usuario = userService.findByUsername(user.getUsername());
+
+		
+		var productosCarrito = carritoSerice.findByUser(usuario);
 		var productos = productoService.findAll();
+
+		for(var producto: productos) {
+			for(var carrito: productosCarrito) {
+				if(producto.equals(carrito.getProducto())) {
+					producto.cantidad = carrito.getCantidad();
+				}
+			}
+		}
+		
+		model.addAttribute("titulo", "SpringCart");
 		model.addAttribute("productos", productos);
 		return "productos/listaProductos";
 	}

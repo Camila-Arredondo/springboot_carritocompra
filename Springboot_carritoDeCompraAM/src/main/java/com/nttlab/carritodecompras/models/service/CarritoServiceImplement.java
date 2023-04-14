@@ -3,22 +3,30 @@ package com.nttlab.carritodecompras.models.service;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nttlab.carritodecompras.models.dao.iCarritoDAO;
+import com.nttlab.carritodecompras.models.dao.iProductoDAO;
+import com.nttlab.carritodecompras.models.dao.iUsuarioDAO;
 import com.nttlab.carritodecompras.models.entity.Carrito;
 import com.nttlab.carritodecompras.models.entity.Producto;
 import com.nttlab.carritodecompras.models.entity.Usuario;
-
+import java.util.*;
 
 @Service
 public class CarritoServiceImplement implements iCarritoService{
 	
 	@Autowired
     public iCarritoDAO carritoDao;
+	
+	@Autowired
+    public iProductoDAO productodao;
+
+	
+	@Autowired
+    public iUsuarioDAO usuarioDao;
 	
 	@Override
 	@Transactional(readOnly = true)
@@ -27,8 +35,11 @@ public class CarritoServiceImplement implements iCarritoService{
 	}
 	@Override
 	@Transactional
-	public void addProduct(Producto producto, Usuario usuario) {
-		
+	public void addProduct(long idProducto, String username) {
+		var usuario = usuarioDao.findByUsername(username);
+
+		var producto = productodao.findOne(idProducto);
+
 		var carritoActual = carritoDao.findByUsuario(usuario);
 		
 		boolean crear = true;
@@ -54,7 +65,11 @@ public class CarritoServiceImplement implements iCarritoService{
 	
 	@Override
 	@Transactional
-	public void quitarProducto(Producto producto, Usuario usuario) {
+	public void quitarProducto(long idProducto, String username) {
+		var usuario = usuarioDao.findByUsername(username);
+
+		var producto = productodao.findOne(idProducto);
+
 		var carritoActual = carritoDao.findByUsuario(usuario);
 		Carrito carritonuevo = null;
 		boolean existe = false;
@@ -79,7 +94,10 @@ public class CarritoServiceImplement implements iCarritoService{
 	
 	@Override
 	@Transactional
-	public void eliminarProducto(Producto producto, Usuario usuario) {
+	public void eliminarProducto(long idProducto, String username) {
+		var usuario = usuarioDao.findByUsername(username);
+
+		var producto = productodao.findOne(idProducto);
 		var carritoActual = carritoDao.findByUsuario(usuario);
 		for(var carrito : carritoActual) {
 			if(carrito.getProducto().equals(producto)) {

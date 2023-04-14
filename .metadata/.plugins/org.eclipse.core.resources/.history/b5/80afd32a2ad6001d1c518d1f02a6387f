@@ -1,0 +1,46 @@
+package com.nttlab.carritodecompras.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.nttlab.carritodecompras.models.entity.Producto;
+import com.nttlab.carritodecompras.models.service.iProductoService;
+
+public class ProductosController {
+	
+	@Autowired
+	private iProductoService productoService;	
+	
+	@GetMapping(value = "productos")
+	public String productoCatálogo(Model model) {
+		model.addAttribute("titulo", "SpringCart");
+		model.addAttribute("productos", productoService.findAll());
+		return "productos";
+	}
+	
+	@GetMapping(value= {"/productos"})
+	public String productos(Model model) {
+		model.addAttribute("productos");
+		return "productos";
+	}
+	
+	@GetMapping(value="/eliminar/{id}")
+	public String eliminarAlumno(@PathVariable(value="id") Long id, Model model, RedirectAttributes flash) {
+		Producto producto = productoService.findOne(id);
+		if(producto == null) {
+			flash.addFlashAttribute("clase", "danger");
+			flash.addFlashAttribute("error", "El producto buscado no se encuentra en nuestros registros");
+			return "redirect:/productos";
+		}
+		else
+		{
+			productoService.delete(id);
+			flash.addFlashAttribute("clase", "success");
+			flash.addFlashAttribute("success", "Producto eliminado del carrito");
+			return "redirect:/productos";
+		}
+	}
+}

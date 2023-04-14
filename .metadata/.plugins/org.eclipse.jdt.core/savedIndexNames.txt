@@ -1,0 +1,4 @@
+INDEX VERSION 1.132+C:\NTTDATA\Springboot_cart\.metadata\.plugins\org.eclipse.jdt.core
+4198358329.index
+1865797976.index
+3516551449.index

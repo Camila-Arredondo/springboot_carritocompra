@@ -1,0 +1,1 @@
+insert into productos (nombre,descripcion,categoria,precio) values ('chocolate trencito','chocolate con un 80% de cacao y 20% de leche','Dulce',800);

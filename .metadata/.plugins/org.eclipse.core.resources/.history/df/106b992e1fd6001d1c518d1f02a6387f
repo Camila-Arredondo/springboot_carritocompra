@@ -1,0 +1,21 @@
+package com.nttlab.carritodecompras.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.nttlab.carritodecompras.models.service.iProductoService;
+
+public class ProductosController {
+	
+	@Autowired
+	private iProductoService productoService;	
+	
+	@GetMapping(value = "productos")
+	public String productoCatálogo(Model model) {
+		model.addAttribute("titulo", "Productos disponibles");
+		model.addAttribute("productos", productoService.findAll());
+		return "productos";
+	}
+	
+}

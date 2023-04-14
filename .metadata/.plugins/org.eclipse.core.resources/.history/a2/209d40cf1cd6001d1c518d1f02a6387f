@@ -1,0 +1,15 @@
+package com.nttlab.carritodecompras.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import com.nttlab.carritodecompras.models.service.iProductoService;
+
+@Controller
+public class CarritoDeCompraController {
+	
+	@Autowired
+	private iProductoService productoService;
+	
+	
+}

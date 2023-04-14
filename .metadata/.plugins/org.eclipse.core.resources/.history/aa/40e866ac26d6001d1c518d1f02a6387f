@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es-CL" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<main>
+		<div class="container mt-4 table-responsive">
+			<div class="row mt-4">
+				<div th:if="${productos.isEmpty()}" class="alert alert-primary"
+					role="alert">No hay productos...</div>
+				<table th:if="${!productos.isEmpty()}"
+					class="table table-bordered table-striped">
+					<thead class="table-dark">
+						<tr>
+							<th>Nombre</th>
+							<th>Categoría</th>
+							<th>Descripción</th>
+							<th>Precio</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="a: ${productos}">
+							<td th:text="${a.id}"></td>
+							<td th:text="${a.nombre}></td>
+							<td th:text="${a.categoria}"></td>
+							<td th:text="${a.descripcion}"></td>
+							<td th:text="${a.precio}"></td>
+							<td>
+								<a class="btn btn-outline-danger" th:href="@{/eliminar/} + ${a.id}" onclick="return confirm('Estas seguro que deseas eliminar el producto del cayito.');">
+									<span class="fs-5">
+										<i class="fa-solid fa-trash-can"></i>
+									</span>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</main>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

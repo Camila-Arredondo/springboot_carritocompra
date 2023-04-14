@@ -1,0 +1,31 @@
+package com.nttlab.carritodecompras.models.entity;
+
+
+
+import java.io.Serializable;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "productos")
+public class Producto implements Serializable{
+	
+
+	public Producto() {
+		
+	}
+	
+	public Producto(String id, String nombre, String descripcion, String categoria, int precio) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.categoria = categoria;
+		this.precio = precio;
+		
+	}
+
+	private static final long serialVersionUID = 1L;
+	
+}

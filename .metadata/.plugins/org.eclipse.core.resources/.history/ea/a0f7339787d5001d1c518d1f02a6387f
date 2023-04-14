@@ -1,0 +1,14 @@
+package com.nttlab.carritodecompras.models.entity;
+
+public class Producto {
+
+	public Producto() {
+		
+	}
+	
+	public Producto(String id, String nombre, String descripcion, String categoria, int precio) {
+		super();
+		
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.nttlab.carritodecompras.models.entity;
+
+public class Role {
+
+}

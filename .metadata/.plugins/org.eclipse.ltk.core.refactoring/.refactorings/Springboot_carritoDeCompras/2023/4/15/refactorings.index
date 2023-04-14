@@ -1,0 +1,20 @@
+1680896155713	Delete element
+1680896169841	Delete element
+1680896216680	Rename type 'clientes'
+1680896321597	Rename type 'clientesController'
+1680897132350	Delete element
+1680897206414	Delete element
+1680897217335	Delete element
+1680897222522	Delete element
+1680897913082	Move 'listaProductos.html' to 'productos'
+1680897916792	Move 'compraTotal.html' to 'productos'
+1680897930801	Move 'login.html' to 'login'
+1680897958504	Move 'perfil.html' to 'perfil'
+1680898588423	Rename type 'TotalDeCompra'
+1680898681799	Rename type 'TotalDeCompraController'
+1680898739245	Delete element
+1680899110554	Rename package 'com.nttlab.carritodecompras.models.dao.entity'
+1680967986856	Rename resource 'compraTotal.html'
+1680968273906	Move 'listaProductos.html' to 'templates'
+1680968282990	Delete element
+1680968504113	Move 'listaProductos.html' to 'productos'

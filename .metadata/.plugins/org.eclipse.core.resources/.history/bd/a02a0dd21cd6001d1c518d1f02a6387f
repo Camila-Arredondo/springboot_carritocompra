@@ -1,0 +1,8 @@
+package com.nttlab.carritodecompras.controllers;
+
+@Controller
+public class CarritoDeCompraController {
+
+	
+	
+}

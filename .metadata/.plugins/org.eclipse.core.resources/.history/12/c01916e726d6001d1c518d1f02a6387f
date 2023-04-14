@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="es-CL" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="componentes/navbar :: head"></head>
+<body>
+	
+	<header th:replace="componentes/navbar :: header"></header>
+
+	<h1>Hola papá este es el home</h1>
+
+	<footer th:replace="componentes/navbar :: footer"></footer>
+</body>
+</html>

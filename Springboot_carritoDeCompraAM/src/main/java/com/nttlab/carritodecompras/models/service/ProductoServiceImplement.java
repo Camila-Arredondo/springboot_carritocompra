@@ -23,7 +23,7 @@ public class ProductoServiceImplement implements iProductoService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Producto findOne(Long id) {
+	public Producto findById(Long id) {
 		return productoDao.findById(id).orElse(null);
 	}
 
@@ -50,7 +50,7 @@ public class ProductoServiceImplement implements iProductoService {
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void deleteById(Long id) {
 		productoDao.deleteById(id);
 
 	}
@@ -61,4 +61,5 @@ public class ProductoServiceImplement implements iProductoService {
 		return productoDao.save(producto);
 		
 	}
+
 }

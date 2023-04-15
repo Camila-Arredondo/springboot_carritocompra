@@ -56,13 +56,13 @@ public class ProductosController {
 
 	@GetMapping(value = "/eliminar/{id}")
 	public String eliminarAlumno(@PathVariable(value = "id") Long id, Model model, RedirectAttributes flash) {
-		Producto producto = productoService.findOne(id);
+		Producto producto = productoService.findById(id);
 		if (producto == null) {
 			flash.addFlashAttribute("clase", "danger");
 			flash.addFlashAttribute("error", "El producto buscado no se encuentra en nuestros registros");
 			return "redirect:/productos";
 		} else {
-			productoService.delete(id);
+			productoService.deleteById(id);
 			flash.addFlashAttribute("clase", "success");
 			flash.addFlashAttribute("success", "Producto eliminado del carrito");
 			return "redirect:/productos";

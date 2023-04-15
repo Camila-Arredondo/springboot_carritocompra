@@ -5,9 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.nttlab.carritodecompras.models.entity.Carrito;
-import com.nttlab.carritodecompras.models.entity.Ventas;
+import com.nttlab.carritodecompras.models.entity.TotalCompra;
+
 @Service
 public interface iTotalCompraService {
-	public void addTotales(List<Carrito> carrito);
-
+	int addTotales(List<Carrito> carrito);
+	List<TotalCompra> findByNumeroOrden(int numero_orden);
 }

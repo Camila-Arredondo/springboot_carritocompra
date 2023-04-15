@@ -1,7 +1,6 @@
 package com.nttlab.carritodecompras.models.service;
 
 import java.util.*;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,17 +21,29 @@ public class TotalCompraServiceImplement implements iTotalCompraService {
 
 	@Override
 	@Transactional()
-	public void addTotales(List<Carrito> carrito) {
-		Ventas ventaNew = new Ventas(new Date());
-		var venta = ventasDao.save(ventaNew);
-		List<TotalCompra> compras = new ArrayList<>();
-		for(var car : carrito) {
-			var compra = car.toTotalCompra();
-			compra.setNumeroOrden(venta.getId());
-			compras.add(compra);
+	public int addTotales(List<Carrito> carrito) {
+		if(carrito.size() != (0)) {
+			Ventas ventaNew = new Ventas(new Date(), carrito.get(0).getUsuario());
+			var venta = ventasDao.save(ventaNew);
+			List<TotalCompra> compras = new ArrayList<>();
+			for(var car : carrito) {
+				var compra = car.toTotalCompra();
+				compra.setNumeroOrden(venta.getId());
+				compras.add(compra);
+			}
+			
+			totalCarritoDao.saveAll(compras);
+			return ventaNew.getId();
 		}
 		
-		totalCarritoDao.saveAll(compras);
+		return -1;
+		 
+	}
+
+	@Override
+	public List<TotalCompra> findByNumeroOrden(int numero_orden) {
+		
+		return totalCarritoDao.findByNumeroOrden(numero_orden);
 	}
 
 }

@@ -1,5 +1,5 @@
 package com.nttlab.carritodecompras.models.entity;
-import java.util.List;
+
 import java.io.Serializable;
 
 import jakarta.persistence.Entity;
@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -81,8 +80,7 @@ public class Carrito implements Serializable {
 	public TotalCompra toTotalCompra() {
 		return new TotalCompra(
 				this.cantidad,
-				this.producto,
-				this.usuario
+				this.producto
 				);
 	}
 

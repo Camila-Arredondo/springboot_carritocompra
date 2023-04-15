@@ -10,7 +10,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.nttlab.carritodecompras.models.entity.Usuario;
 import com.nttlab.carritodecompras.models.service.JpaUserDetailService;
-import com.nttlab.carritodecompras.models.service.iCarritoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -63,9 +62,8 @@ public class LoginController {
 			org.springframework.ui.Model model,
 			Principal principal,
 			RedirectAttributes redirectAttributes) {
+	
 		
-		System.out.println(usuario.getUsername());
-		System.out.println(usuario.getPassword());
 		
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(usuario.getPassword());
@@ -73,8 +71,19 @@ public class LoginController {
 		usuario.setPassword(encodedPassword);
 		System.out.println(usuario.getPassword());
 
-		jpauserdetailservice.createUser(usuario);
-		return "redirect:/login";
+		String respuesta = jpauserdetailservice.createUser(usuario);
+		
+		if(respuesta.equals("OK")) {
+			redirectAttributes.addFlashAttribute("info", "Se ha creado el usuario con exito");		
+			return "redirect:/login";
+			
+		}else  {
+			redirectAttributes.addFlashAttribute("danger", respuesta);		
+			return "redirect:/registrar";
+		}
+		
+		
+		
 		
 	}
 }

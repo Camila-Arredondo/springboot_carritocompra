@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es-CL" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="componentes/navbar :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<main>
+		<div class="container mt-4 table-responsive">
+			<div class="row mt-4">
+				<div th:if="${elementosVenta.isEmpty()}" class="alert alert-primary"
+					role="alert">No hay compras...</div>
+				<table th:if="${!elementosVenta.isEmpty()}"
+					class="table table-bordered table-striped">
+					<thead class="table-dark">
+						<tr>
+							<th>Numero de Orden</th>
+							<th>Fecha</th>
+							<th>Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="a: ${elementosVenta}">
+							<td th:text="${a.id}"></td>
+							<td th:text="${#dates.format(a.fechaCreacion, 'dd-MM-yyyy HH:mm:ss')}"></td>
+							
+							<td>
+								
+								<a class="btn btn-outline-success" th:href="@{/ventas/{id}(id=${a.id})}" >
+									<span class="fs-5">
+										<i class="fa-solid fa-eye"></i>
+									</span>
+								</a>
+								
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				
+				
+				
+			</div>
+		</div>
+	</main>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,87 @@
+package com.nttlab.carritodecompras.controllers;
+ 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.nttlab.carritodecompras.models.service.JpaUserDetailService;
+import com.nttlab.carritodecompras.models.service.iCarritoService;
+import com.nttlab.carritodecompras.models.service.iProductoService;
+import com.nttlab.carritodecompras.models.service.iTotalCompraService;
+import com.nttlab.carritodecompras.models.service.iVentasService;
+@Controller
+@RequestMapping("/ventas")
+public class VentasController {
+	
+	@Autowired
+	private JpaUserDetailService userService;
+	@Autowired
+	private iTotalCompraService totalcompraService;
+	@Autowired
+	private iVentasService ventaservice;
+	
+
+	@GetMapping(value = "{id}")
+	public String ventasid(@PathVariable(value = "id") int id, Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+		var usuario = userService.findByUsername(user.getUsername());
+		
+		var venta = ventaservice.findByIdAndUsuario(id, usuario);
+		
+		if(venta == null) {
+			model.addAttribute("danger","No se ha encontrado la venta por numero de orden: "  + id);
+			return "redirect:/";
+		}
+		
+		var elementosVenta = totalcompraService.findByNumeroOrden(id);
+		
+		double total = 0;
+		
+		
+		for(var carrito : elementosVenta) {
+			total += (carrito.getProducto().getPrecio() * carrito.getCantidad());
+		}
+
+		LocalDate fechaLocal = venta.getFechaCreacion().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+
+		String fechaFormateada = fechaLocal.format(formatoFecha);
+
+		
+		
+		model.addAttribute("elementosVenta", elementosVenta);
+		model.addAttribute("total", total);
+		model.addAttribute("numeroVenta", "N° " + id);
+		model.addAttribute("fechaVenta", fechaFormateada);
+
+		return "productos/venta";
+
+	}
+	@GetMapping(value = "")
+	public String listaventas(Model model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+		var usuario = userService.findByUsername(user.getUsername());
+		
+		var ventas = ventaservice.findByUsuario(usuario);
+		
+		
+		
+		model.addAttribute("elementosVenta", ventas);
+
+		return "productos/miscompras";
+
+	}
+}

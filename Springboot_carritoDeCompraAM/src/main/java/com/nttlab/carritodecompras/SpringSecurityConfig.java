@@ -36,6 +36,7 @@ public class SpringSecurityConfig {
 		http.authorizeHttpRequests()
 			.requestMatchers("/","/css/**","/js/**","/img/**").permitAll()
 			.requestMatchers("/registrar/**").permitAll()
+			.requestMatchers("/productos/nuevo").hasRole("ADMIN")
 
 			.requestMatchers("/listar/**").hasAnyRole("USER","ADMIN")
 			.requestMatchers("/nuevo/**").hasRole("ADMIN")

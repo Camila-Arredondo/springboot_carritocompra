@@ -1,12 +1,16 @@
 package com.nttlab.carritodecompras.controllers;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -63,5 +67,24 @@ public class ProductosController {
 			flash.addFlashAttribute("success", "Producto eliminado del carrito");
 			return "redirect:/productos";
 		}
+	}
+	
+	@GetMapping(value = "/nuevo")
+	public String crearproducto(Model model, RedirectAttributes flash) {
+		model.addAttribute("titulo", "SpringCart");
+		return "/productos/newproduct";
+	}
+	
+	@PostMapping(value="/nuevo")
+	public String CrearUsuario(@ModelAttribute("productoForm") Producto producto,
+			org.springframework.ui.Model model,
+			Principal principal,
+			RedirectAttributes redirectAttributes, RedirectAttributes flash) {
+		
+		
+		productoService.crearProducto(producto);
+		flash.addFlashAttribute("success", "Producto " + producto.getNombre() + " creado correctamente");
+
+		return "redirect:/productos";
 	}
 }

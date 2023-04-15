@@ -70,12 +70,20 @@ public class JpaUserDetailService implements UserDetailsService{
 	}
 
 	@Transactional
-	public void createUser(Usuario usuario) {
-		usuario.setActive(true);
-		var usuariocreado = usuarioDao.save(usuario);	
-		Role role = new Role("ROLE_USER", usuariocreado);
-		var newrole = roleDao.save(role);
+	public String createUser(Usuario usuario) {
 		
+		var existe = usuarioDao.findByUsername(usuario.getUsername());
+		
+		if(existe == null) {
+			usuario.setActive(true);
+			var usuariocreado = usuarioDao.save(usuario);	
+			Role role = new Role("ROLE_USER", usuariocreado);
+			var newrole = roleDao.save(role);
+			return "OK";
+		}
+		
+		return "Ya existe un usario registrado con el nombre " + usuario.getUsername();
+	
 	}
 
 

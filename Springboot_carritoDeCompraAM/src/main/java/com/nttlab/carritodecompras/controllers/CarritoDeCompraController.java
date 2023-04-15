@@ -2,7 +2,6 @@ package com.nttlab.carritodecompras.controllers;
  
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.nttlab.carritodecompras.models.entity.Carrito;
-import com.nttlab.carritodecompras.models.entity.Producto;
-import com.nttlab.carritodecompras.models.entity.Usuario;
 import com.nttlab.carritodecompras.models.service.JpaUserDetailService;
 import com.nttlab.carritodecompras.models.service.iCarritoService;
 import com.nttlab.carritodecompras.models.service.iProductoService;
@@ -102,10 +98,10 @@ public class CarritoDeCompraController {
 		
 		var productosCarrito = carritoSerice.findByUser(usuario);
 
-		totalcompraService.addTotales(productosCarrito);
+		int idVenta = totalcompraService.addTotales(productosCarrito);
 		
-		
-		return "redirect:/carrito";
+		carritoSerice.deleteAllByUsuario(usuario);
+		return "redirect:/ventas/"+idVenta;
 
 	}
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es-CL" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="componentes/navbar :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+	<main>
+		<div class="container mt-4 table-responsive">
+			<div class="row mt-4">
+				<div th:if="${users.isEmpty()}" class="alert alert-primary"
+					role="alert">No hay clientes...</div>
+				<table th:if="${!users.isEmpty()}"
+					class="table table-bordered table-striped">
+					<thead class="table-dark">
+						<tr>
+							<th>Estado</th>
+							<th>Nombre Usuario</th>
+							<th>Clave</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="a: ${users}">
+						
+							<td th:text="${a.active}"></td>
+							<td th:text="${a.username}"></td>
+							<td th:text="${a.password}"></td>
+							<td>
+								<a class="btn btn-outline-danger" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/productos/eliminar/{id}(id=${a.id})}" onclick="return confirm('Estas seguro que deseas eliminar el producto del cayito.');">
+									<span class="fs-5">
+										<i class="fa-solid fa-trash-can"></i>
+									</span>
+								</a>
+
+								
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</main>
+
+	<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

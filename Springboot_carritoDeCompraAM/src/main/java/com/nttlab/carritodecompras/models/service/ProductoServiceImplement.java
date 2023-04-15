@@ -54,4 +54,11 @@ public class ProductoServiceImplement implements iProductoService {
 		productoDao.deleteById(id);
 
 	}
+
+	@Override
+	public Producto crearProducto(Producto producto) {
+		
+		return productoDao.save(producto);
+		
+	}
 }

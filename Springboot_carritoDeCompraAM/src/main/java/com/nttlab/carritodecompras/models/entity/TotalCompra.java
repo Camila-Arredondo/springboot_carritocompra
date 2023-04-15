@@ -1,7 +1,6 @@
 package com.nttlab.carritodecompras.models.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,9 +20,7 @@ public class TotalCompra implements Serializable  {
     private Integer id;
     private Integer numeroOrden;
     private double cantidad;
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+ 
     
     @ManyToOne
     @JoinColumn(name = "producto_id")
@@ -34,19 +31,17 @@ public class TotalCompra implements Serializable  {
 		
 	}
 
-	public TotalCompra(double cantidad, Producto producto, Usuario usuario, Integer numeroOrden) {
+	public TotalCompra(double cantidad, Producto producto, Integer numeroOrden) {
 		super();
 		this.cantidad = cantidad;
 		this.producto = producto;
-		this.usuario = usuario;
 		this.numeroOrden = numeroOrden;
 	}
 
-	public TotalCompra(double cantidad, Producto producto, Usuario usuario) {
+	public TotalCompra(double cantidad, Producto producto) {
 		super();
 		this.cantidad = cantidad;
 		this.producto = producto;
-		this.usuario = usuario;
 	}
 
 
@@ -66,15 +61,7 @@ public class TotalCompra implements Serializable  {
 	public void setCantidad(double cantidad) {
 		this.cantidad = cantidad;
 	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-
+	
 	public Producto getProducto() {
 		return producto;
 	}

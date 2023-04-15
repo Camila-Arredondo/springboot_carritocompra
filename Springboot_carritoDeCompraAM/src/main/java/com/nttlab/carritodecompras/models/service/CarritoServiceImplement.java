@@ -11,9 +11,7 @@ import com.nttlab.carritodecompras.models.dao.iCarritoDAO;
 import com.nttlab.carritodecompras.models.dao.iProductoDAO;
 import com.nttlab.carritodecompras.models.dao.iUsuarioDAO;
 import com.nttlab.carritodecompras.models.entity.Carrito;
-import com.nttlab.carritodecompras.models.entity.Producto;
 import com.nttlab.carritodecompras.models.entity.Usuario;
-import java.util.*;
 
 @Service
 public class CarritoServiceImplement implements iCarritoService{
@@ -38,7 +36,8 @@ public class CarritoServiceImplement implements iCarritoService{
 	public void addProduct(long idProducto, String username) {
 		var usuario = usuarioDao.findByUsername(username);
 
-		var producto = productodao.findOne(idProducto);
+		var productofind = productodao.findById(idProducto);
+		var producto = productofind.get();
 
 		var carritoActual = carritoDao.findByUsuario(usuario);
 		
@@ -68,8 +67,8 @@ public class CarritoServiceImplement implements iCarritoService{
 	public void quitarProducto(long idProducto, String username) {
 		var usuario = usuarioDao.findByUsername(username);
 
-		var producto = productodao.findOne(idProducto);
-
+		var productofind = productodao.findById(idProducto);
+		var producto = productofind.get();
 		var carritoActual = carritoDao.findByUsuario(usuario);
 		Carrito carritonuevo = null;
 		boolean existe = false;
@@ -97,7 +96,9 @@ public class CarritoServiceImplement implements iCarritoService{
 	public void eliminarProducto(long idProducto, String username) {
 		var usuario = usuarioDao.findByUsername(username);
 
-		var producto = productodao.findOne(idProducto);
+		var productofind = productodao.findById(idProducto);
+		var producto = productofind.get();
+
 		var carritoActual = carritoDao.findByUsuario(usuario);
 		for(var carrito : carritoActual) {
 			if(carrito.getProducto().equals(producto)) {
@@ -105,6 +106,13 @@ public class CarritoServiceImplement implements iCarritoService{
 				break;
 			}
 		}
+	}
+	@Override
+	@Transactional
+	public void deleteAllByUsuario(Usuario usuario) {
+		
+		carritoDao.deleteAllByUsuario(usuario);
+		
 	}
 
 	

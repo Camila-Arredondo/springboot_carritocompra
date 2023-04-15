@@ -9,3 +9,22 @@
 	width: 250px;
 	height: 100px;
 }
+.cuadrorojo {
+    align-items: center;
+    border: 3px solid #ff4a4a;
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    justify-content: center;
+    min-height: 104px;
+    text-align: center;
+    width: 390px;
+}
+.text-red-500{
+	color: red;
+	font-weight: bold;
+}
+.ml-3{
+  margin-left: 15px ;
+	
+}

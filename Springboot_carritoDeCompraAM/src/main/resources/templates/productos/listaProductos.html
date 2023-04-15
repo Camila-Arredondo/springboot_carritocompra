@@ -7,6 +7,7 @@
 
 	<main>
 		<div class="container mt-4 table-responsive">
+		<a sec:authorize="hasAuthority('ROLE_ADMIN')" class="btn btn-primary" href="/productos/nuevo">Crear Producto</a>
 			<div class="row mt-4">
 				<div th:if="${productos.isEmpty()}" class="alert alert-primary"
 					role="alert">No hay productos...</div>
@@ -29,7 +30,7 @@
 							<td th:text="${a.descripcion}"></td>
 							<td th:text="${a.precio}"></td>
 							<td>
-								<a class="btn btn-outline-danger" th:href="@{/productos/eliminar/{id}(id=${a.id})}" onclick="return confirm('Estas seguro que deseas eliminar el producto del cayito.');">
+								<a class="btn btn-outline-danger" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/productos/eliminar/{id}(id=${a.id})}" onclick="return confirm('Estas seguro que deseas eliminar el producto del cayito.');">
 									<span class="fs-5">
 										<i class="fa-solid fa-trash-can"></i>
 									</span>
@@ -46,11 +47,13 @@
 										<i class="fa-solid fa-cart-plus"></i>
 									</span>
 								</a>
-								<a class="btn btn-outline-success" th:href="@{/carrito/eliminar/{id}/productos(id=${a.id})}" >
+								<!-- <a class="btn btn-outline-success" th:href="@{/carrito/eliminar/{id}/productos(id=${a.id})}" >
 									<span class="fs-5">
 										<i class="fa-solid fa-eraser"></i>
 									</span>
-								</a>
+								</a>-->
+								
+								
 							</td>
 						</tr>
 					</tbody>

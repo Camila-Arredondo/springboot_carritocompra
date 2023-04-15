@@ -23,7 +23,7 @@
 		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
 			<div class="container">
 				<a class="navbar-brand" th:href="@{/}"> <img class="img-navbar"
-					src="img/logo.png"
+					src="/img/logo.png"
 					alt="Logo Springboot" />
 				</a>
 				<button class="navbar-toggler" type="button"
@@ -40,7 +40,7 @@
 							sec:authorize="isAuthenticated()" th:href="@{/productos}">Productos</a>
 						</li>
 							<li class="nav-item"><a class="nav-link"
-							sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/productos}">Cliente</a>
+							 th:href="@{/ventas}">Mis Compras</a>
 						</li>
 							<li class="nav-item"><a class="nav-link"
 							sec:authorize="isAuthenticated()" th:href="@{/carrito}">Carrito</a>
@@ -94,7 +94,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-4">
-					<img class="img-footer" alt="" src="img/logo.png">
+					<img class="img-footer" alt="" src="/img/logo.png">
 					<br>
 					<p sec:authorize="isAuthenticated()">
 						Usuario conectado: <span sec:authentication="name"></span> |

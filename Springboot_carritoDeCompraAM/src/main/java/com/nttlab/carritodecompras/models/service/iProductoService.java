@@ -18,6 +18,7 @@ public interface iProductoService {
 	public Producto findByDescripcion(String descripcion);
 
 	public Producto findOne(Long id);
+	public Producto crearProducto(Producto producto);
 
 	public void delete(Long id);
 	

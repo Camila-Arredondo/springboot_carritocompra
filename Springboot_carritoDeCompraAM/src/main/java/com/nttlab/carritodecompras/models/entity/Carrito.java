@@ -2,6 +2,7 @@ package com.nttlab.carritodecompras.models.entity;
 
 import java.io.Serializable;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,14 +23,14 @@ public class Carrito implements Serializable {
     //private double precio;
     //private double total;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
     
    // @OneToMany(mappedBy = "carrito")
   //  private List<Carrito> detalle;
     
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "producto_id")
     private Producto producto;
     

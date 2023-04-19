@@ -13,9 +13,9 @@ public interface iUsuarioService {
 	public List<Usuario> findAll();
 
 
-	public Producto findByUsername(String descripcion);
+	public Usuario findByUsername(String username);
 
 	public void delete(Long id);
-	
+	public Usuario crearUsuario(Usuario usuario);
 	
 }

@@ -2,13 +2,19 @@ package com.nttlab.carritodecompras.models.entity;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -19,29 +25,33 @@ public class Producto implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	public String nombre;
-	public String descripcion;
-	public String categoria;
-	public Integer precio;
+	private String nombre;
+	private String descripcion;
+	@Column(columnDefinition = "LONGTEXT")
+	private String foto;
+	private Integer precio;
 	@Transient
-	public double cantidad;
+	private double cantidad;
 	
-	/*@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name="carrito_id", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name="categoria_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	private Carrito carrera;*/
+    @Fetch(FetchMode.JOIN)
+	private Categoria categoria;
+
 
 	public Producto() {
 
 	}
 
-	public Producto(String nombre, String descripcion, String categoria, int precio) {
+	public Producto(String nombre, String descripcion, Categoria categoria, int precio, String foto) {
 		super();
 
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.categoria = categoria;
 		this.precio = precio;
+		this.foto = foto;
 
 	}
 
@@ -60,7 +70,14 @@ public class Producto implements Serializable {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	public String getFoto() {
+		return foto;
+	}
 
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+	
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -69,11 +86,11 @@ public class Producto implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public String getCategoria() {
+	public Categoria getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
+	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
 

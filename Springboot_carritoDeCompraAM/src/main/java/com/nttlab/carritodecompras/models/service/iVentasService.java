@@ -8,6 +8,6 @@ import com.nttlab.carritodecompras.models.entity.Usuario;
 import com.nttlab.carritodecompras.models.entity.Ventas;
 @Service
 public interface iVentasService {
-	public List<Ventas> findByUsuario(Usuario usuario);
-	public Ventas findByIdAndUsuario(long id, Usuario usuario);
+	public List<Ventas> findByUsuario(String usuario);
+	public Ventas findByIdAndUsuario(long id, String usuario);
 }

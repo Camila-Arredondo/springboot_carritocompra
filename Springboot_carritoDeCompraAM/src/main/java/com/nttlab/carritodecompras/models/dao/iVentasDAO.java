@@ -9,6 +9,6 @@ import com.nttlab.carritodecompras.models.entity.Ventas;
 public interface iVentasDAO extends CrudRepository<Ventas, Long> {
 
 	
-    List<Ventas> findByUsuario(Usuario usuario);
-	Ventas findByIdAndUsuario(long id, Usuario usuario);
+    public List<Ventas> findByUsuario(String usuario);
+	public Ventas findByIdAndUsuario(long id, String usuario);
 }

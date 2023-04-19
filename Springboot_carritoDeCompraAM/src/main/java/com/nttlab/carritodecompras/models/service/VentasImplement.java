@@ -13,12 +13,13 @@ public class VentasImplement implements iVentasService {
 	@Autowired
 	public iVentasDAO ventasDao;
 
-	public List<Ventas> findByUsuario(Usuario usuario){
+	public List<Ventas> findByUsuario(String usuario){
 		return ventasDao.findByUsuario(usuario);
 	}
 
-	public Ventas findByIdAndUsuario(long id, Usuario usuario) {
+	public Ventas findByIdAndUsuario(long id, String usuario) {
 		return ventasDao.findByIdAndUsuario(id, usuario);
 	}
 
 }
+

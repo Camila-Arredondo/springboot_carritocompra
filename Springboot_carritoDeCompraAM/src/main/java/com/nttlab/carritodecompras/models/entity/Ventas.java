@@ -25,23 +25,21 @@ public class Ventas implements Serializable  {
 		
 	}
 
-	public Ventas(Date fechacreacion, Usuario usuario){
+	public Ventas(Date fechacreacion, String usuario){
 		
 		this.fechaCreacion =fechacreacion ;
 		this.usuario = usuario;
 	}
 
-   @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
+    private String usuario;
 
 
 
-	public Usuario getUsuario() {
+	public String getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
 

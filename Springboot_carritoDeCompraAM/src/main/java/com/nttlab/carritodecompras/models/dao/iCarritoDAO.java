@@ -9,7 +9,7 @@ import com.nttlab.carritodecompras.models.entity.Usuario;
 
 public interface iCarritoDAO extends CrudRepository<Carrito, Integer> {
 	
-	public List <Carrito> findByUsuario(Usuario usuario);
-	public void deleteAllByUsuario(Usuario usuario);
+	public List <Carrito> findByUsuario(String usuario);
+	public void deleteAllByUsuario(String usuario);
 
 }

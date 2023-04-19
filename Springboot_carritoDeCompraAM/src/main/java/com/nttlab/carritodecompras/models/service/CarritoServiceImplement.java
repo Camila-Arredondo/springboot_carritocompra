@@ -28,13 +28,12 @@ public class CarritoServiceImplement implements iCarritoService{
 	
 	@Override
 	@Transactional(readOnly = true)
-	public List<Carrito> findByUser(Usuario usuario) {
+	public List<Carrito> findByUser(String usuario) {
 		return (List<Carrito>) carritoDao.findByUsuario(usuario);
 	}
 	@Override
 	@Transactional
-	public void addProduct(long idProducto, String username) {
-		var usuario = usuarioDao.findByUsername(username);
+	public void addProduct(long idProducto, String usuario) {
 
 		var productofind = productodao.findById(idProducto);
 		var producto = productofind.get();
@@ -64,8 +63,7 @@ public class CarritoServiceImplement implements iCarritoService{
 	
 	@Override
 	@Transactional
-	public void quitarProducto(long idProducto, String username) {
-		var usuario = usuarioDao.findByUsername(username);
+	public void quitarProducto(long idProducto, String usuario) {
 
 		var productofind = productodao.findById(idProducto);
 		var producto = productofind.get();
@@ -93,8 +91,7 @@ public class CarritoServiceImplement implements iCarritoService{
 	
 	@Override
 	@Transactional
-	public void eliminarProducto(long idProducto, String username) {
-		var usuario = usuarioDao.findByUsername(username);
+	public void eliminarProducto(long idProducto, String usuario) {
 
 		var productofind = productodao.findById(idProducto);
 		var producto = productofind.get();
@@ -109,7 +106,7 @@ public class CarritoServiceImplement implements iCarritoService{
 	}
 	@Override
 	@Transactional
-	public void deleteAllByUsuario(Usuario usuario) {
+	public void deleteAllByUsuario(String usuario) {
 		
 		carritoDao.deleteAllByUsuario(usuario);
 		

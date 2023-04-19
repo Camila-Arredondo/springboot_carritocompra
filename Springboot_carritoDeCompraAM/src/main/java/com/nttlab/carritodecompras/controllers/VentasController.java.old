@@ -36,19 +36,15 @@ public class VentasController {
 	public String ventasid(@PathVariable(value = "id") int id, Model model) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+		
 		var usuario = userService.findByUsername(user.getUsername());
-		
 		var venta = ventaservice.findByIdAndUsuario(id, usuario);
-		
 		if(venta == null) {
 			model.addAttribute("danger","No se ha encontrado la venta por numero de orden: "  + id);
 			return "redirect:/";
 		}
-		
 		var elementosVenta = totalcompraService.findByNumeroOrden(id);
-		
 		double total = 0;
-		
 		
 		for(var carrito : elementosVenta) {
 			total += (carrito.getProducto().getPrecio() * carrito.getCantidad());

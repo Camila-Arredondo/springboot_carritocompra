@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 
 @Entity
@@ -18,17 +19,13 @@ public class Carrito implements Serializable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    //private String nombre;
     private double cantidad;
-    //private double precio;
-    //private double total;
+   
+    @Transient
+	private Integer productoid;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
     
-   // @OneToMany(mappedBy = "carrito")
-  //  private List<Carrito> detalle;
+    private String usuario;
     
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "producto_id")
@@ -39,17 +36,26 @@ public class Carrito implements Serializable {
 	}
     
     
-	//public Carrito(Integer id, String nombre, double cantidad, double precio, double total) {
-	public Carrito(double cantidad, Producto producto, Usuario usuario) {
-
+	public Carrito(double cantidad, Producto producto, String usuario) {
 		super();
-		//this.id = id;
-		//this.nombre = nombre;
 		this.cantidad = cantidad;
 		this.producto = producto;
 		this.usuario = usuario;
-		//this.precio = precio;
-		//this.total = total;
+	}
+
+	public Carrito(Integer productoid, String usuario) {
+		super();
+		this.productoid = productoid;
+		this.usuario = usuario;
+
+	}
+	public Integer getProductoid() {
+		return productoid;
+	}
+
+
+	public void setProductoid(Integer productoid) {
+		this.productoid = productoid;
 	}
 
 
@@ -71,10 +77,10 @@ public class Carrito implements Serializable {
 		this.producto = producto;
 	}
 
-	public Usuario getUsuario() {
+	public String getUsuario() {
 		return usuario;
 	}
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(String usuario) {
 		this.usuario = usuario;
 	}
 	

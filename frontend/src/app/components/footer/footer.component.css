@@ -1,0 +1,11 @@
+.img-footer {
+    width: 150px;
+    height: 150px;
+}
+footer{
+    background-color: #5cc569;
+    
+}
+.footer-default {
+    flex-shrink: 0;
+  }

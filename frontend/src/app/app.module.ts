@@ -20,7 +20,9 @@ import { CategoriaComponent } from './components/productos/categoria/categoria.c
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
-// import { TimePipe } from './pipes/time.pipe';
+import { AuthModule } from '@auth0/auth0-angular';
+import { environment } from 'src/environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -36,8 +38,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     Page404Component,
     FormularioComponent,
     OrderListPipe,
-    CategoriaComponent,
-    // TimePipe
+    CategoriaComponent
   ],
   imports: [
     BrowserModule,
@@ -46,8 +47,9 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxMaskDirective, 
-    NgxMaskPipe
+    NgxMaskDirective,
+    NgxMaskPipe,
+    AuthModule.forRoot(environment.auth0),
 
   ],
   providers: [provideNgxMask()],

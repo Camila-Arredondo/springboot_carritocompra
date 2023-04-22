@@ -6,8 +6,10 @@ import { Page404Component } from './components/page404/page404.component';
 import { ProductosComponent } from './components/productos/productos.component';
 import { HomeComponent } from './components/home/home.component';
 import { CarritoComponent } from './components/carrito/carrito.component';
-import { FormularioComponent } from './components/productos/formulario/formulario.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
+import { AuthGuard } from '@auth0/auth0-angular';
+import { FormularioComponent } from './components/productos/formulario/formulario.component';
+
 
 const routes: Routes = [
   {
@@ -20,22 +22,22 @@ const routes: Routes = [
     path: 'index', redirectTo: '',
   },
   {
-    path: 'productos', component: ProductosComponent, 
+    path: 'productos', component: ProductosComponent, canActivate: [AuthGuard]
   },
   {
-    path: 'productos/formulario', component: FormularioComponent
+    path: 'productos/formulario', component: FormularioComponent,canActivate: [AuthGuard]
   },
   {
-    path: 'productos/formulario/:id', component: FormularioComponent
+    path: 'productos/formulario/:id', component: FormularioComponent,canActivate: [AuthGuard]
   },
   {
     path: 'nosotros', component: NosotrosComponent,
   },
   {
-    path: 'carrito', component: CarritoComponent,
+    path: 'carrito', component: CarritoComponent,canActivate: [AuthGuard]
   },
   {
-    path: 'perfil', component: PerfilComponent,
+    path: 'perfil', component: PerfilComponent,canActivate: [AuthGuard]
   },
   {
     path: '404', component: Page404Component,

@@ -20,12 +20,13 @@
         <img class="card-img-top" [src]="producto.foto" >
       </div>
         <div class="card-body">
-        <h5 class="card-title">{{producto.nombre}}</h5>
+        <h3 class="card-title">{{producto.nombre}}</h3>
         <p class="card-text">{{producto.descripcion}}</p>
+        <h5 class="card-text">{{convertToMoney(producto.precio)}}</h5>
         <div class="d-flex justify-content-between align-items-center">
-          <button class="btn btn-secondary" (click)="accionProducto(producto,  'quitar')">-</button>
+          <button class="btn btn-warning"(click)="accionProducto(producto,  'quitar')"><fa-icon [icon]="faMinus"></fa-icon></button>
           <h6>{{producto.cantidad}}</h6>
-          <button class="btn btn-secondary" (click)="accionProducto(producto, 'agregar')">+</button>
+          <button class="btn btn-success" (click)="accionProducto(producto, 'agregar')"><fa-icon [icon]="faPlus"></fa-icon></button>
 
         </div>
         <div class="mt-2 d-flex justify-content-between w-100">

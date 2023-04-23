@@ -6,6 +6,7 @@ import { CarritoService } from 'src/app/services/carrito.service';
 import { Productos } from 'src/app/services/productos';
 import { ProductosService } from 'src/app/services/productos.service';
 import swal from 'sweetalert2';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-productos',
@@ -31,6 +32,9 @@ export class ProductosComponent implements OnInit{
   constructor(private productoService: ProductosService, private auth: AuthService, private carritoService: CarritoService, private toastr: ToastrService) {}
 
 ngOnInit(): void {
+
+
+
   this.auth.user$.subscribe((success: any) => {
     console.log(success);
     this.user = success;
@@ -98,6 +102,21 @@ eliminarProducto(producto: Productos) : void {
       )
     }
   })
+}
+convertToMoney(numero: string | number){
+  let numeroStr = numero.toString();
+
+  let partes = numeroStr.split(".");
+
+  let parteEntera = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  let parteDecimal = "";
+  if (partes.length > 1) {
+    parteDecimal = "." + partes[1];
+  }
+
+  return "$ "+(parteEntera + parteDecimal).replaceAll(',',".");
+
 }
 accionProducto(producto: Productos, accion: string){
   if(producto.cantidad == 0 && accion == "quitar"){

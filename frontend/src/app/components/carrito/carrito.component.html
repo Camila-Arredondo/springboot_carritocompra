@@ -1,11 +1,20 @@
+<div class="container my-4 bg-dark text-white py-3 rounded">
+  <div class="row">
+      <div class="col-md-6">
+          <h1>{{ titulo }}</h1>
+          <p>Actualmente usted ha agregado {{carrito.length}} productos a su carrito de compras</p>
+      </div>
+  </div>
+</div>
+
 <div class="container mt-4 table-responsive">
     <div class="row mt-4">
-        <div th:if="${productosCarrito.isEmpty()}" class="alert alert-primary"
-            role="alert">No hay productos...</div>
-        <table th:if="${!productosCarrito.isEmpty()}"
-            class="table table-bordered table-striped">
+      <div class="card col-lg-6 img-card">
+      </div>
+        <table class="table table-bordered table-striped">
             <thead class="table-dark">
                 <tr>
+                    <th>Foto</th>
                     <th>Nombre</th>
                     <th>Categoria</th>
                     <th>Descripcion</th>
@@ -15,47 +24,43 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="a: ${productosCarrito}">
-                    <td th:text="${a.producto.nombre}"></td>
-                    <td th:text="${a.producto.categoria}"></td>
-                    <td th:text="${a.producto.descripcion}"></td>
-                    <td th:text="${a.producto.precio}"></td>
-                    <td th:text="${a.cantidad}"></td>
-                    
+                <tr *ngFor="let producto of carrito">
+                    <td><img style="max-width: 150px; max-height: 150px;" [src]="producto.producto.foto" /></td>
+                    <td>{{producto.producto.nombre}}</td>
+                    <td>{{producto.producto.categoria.nombre}}</td>
+                    <td>{{producto.producto.descripcion}}</td>
+                    <td>{{convertToMoney(producto.producto.precio)}}</td>
+                    <td>{{producto.cantidad}}</td>
+
                     <td>
-                        
-                        <a class="btn btn-outline-success" th:href="@{/carrito/agregar/{id}/carrito(id=${a.producto.id})}" >
-                            <span class="fs-5">
-                                <i class="fa-solid fa-cart-plus"></i>
-                            </span>
-                        </a>
-                        
-                        <a class="btn btn-outline-success" th:href="@{/carrito/quitar/{id}/carrito(id=${a.producto.id})}" >
-                            <span class="fs-5">
-                                <i class="fa-solid fa-square-minus"></i>
-                            </span>
-                        </a>
-                        <a class="btn btn-outline-success" th:href="@{/carrito/eliminar/{id}/carrito(id=${a.producto.id})}" >
-                            <span class="fs-5">
-                                <i class="fa-solid fa-eraser"></i>
-                            </span>
-                        </a>
+                    <button class="btn btn-warning" (click)="accionCarrito(producto, 'quitar')"><fa-icon [icon]="faMinus"></fa-icon></button>
+                    <button class="btn btn-success" (click)="accionCarrito(producto, 'agregar')"><fa-icon [icon]="faPlus"></fa-icon></button>
+                    <button class="btn btn-danger" (click)="accionCarrito(producto, 'agregar')"><fa-icon [icon]="faEraser"></fa-icon></button>
+
                     </td>
                 </tr>
             </tbody>
         </table>
-        
-        
         <div class="text-right">
         <table class="table table-bordered table-striped d-inline-block">
             <tr>
-                <td>TOTAL:</td>
-                <td th:text=${total}></td>
+                <h5>TOTAL: {{convertToMoney(totalPrecioCarito())}}</h5>
             </tr>
         </table>
-        <a th:href="@{/carrito/vender}" class="btn btn-success">Comprar</a>
+        <a [routerLink]="['/productos']" class="btn btn-success">Comprar</a>
     </div>
-        
+
     </div>
 </div>
 
+
+
+<ng-template #NoHayProductos>
+  <div class="container my-4 py-3 rounded">
+      <div class="card">
+          <div class="card-body text-center">
+              <h5 class="card-title">{{ mensaje }}</h5>
+          </div>
+      </div>
+  </div>
+</ng-template>

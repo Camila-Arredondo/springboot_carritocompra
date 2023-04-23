@@ -5,6 +5,5 @@ export class Productos {
     categoria : string = '';
     precio : number | null = null;
     cantidad : number = 0;
-
     foto: string = '';
 }

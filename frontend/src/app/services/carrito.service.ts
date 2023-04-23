@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, catchError, throwError, map } from 'rxjs';
+import { Observable, catchError, throwError, map, switchMap } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Carrito } from './carrito';
 
@@ -49,6 +49,7 @@ export class CarritoService {
     );
   }
 
+
   limpiarCarrito(username: string) : Observable<any> {
     return this.http.delete(`${this.urlEndPoint}`,{
       headers: {
@@ -67,7 +68,6 @@ export class CarritoService {
       })
     )
   }
-
 
 }
 

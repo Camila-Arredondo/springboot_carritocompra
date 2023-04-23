@@ -2,7 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { Carrito } from 'src/app/services/carrito';
 import { CarritoService } from 'src/app/services/carrito.service';
+import { ToastrService } from 'ngx-toastr';
+
 import swal from 'sweetalert2';
+import { faEraser, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-carrito',
@@ -12,12 +15,16 @@ import swal from 'sweetalert2';
 export class CarritoComponent implements OnInit {
   @Input() carrito : Carrito[] = [];
   @Input() mensaje: string = '';
+  titulo : string = 'Productos Agregados';
+  faPlus = faPlus;
+  faEraser = faEraser;
+  faMinus = faMinus;
 
   user : any = {};
 
   optionSort: { property: string | null, order : string } = { property : null, order : 'asc' };
 
-  constructor(private carritoService: CarritoService, private auth: AuthService) {}
+  constructor(private carritoService: CarritoService, private auth: AuthService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.auth.user$.subscribe((success: any) => {
@@ -30,12 +37,37 @@ export class CarritoComponent implements OnInit {
   getCarrito(username: string) : void {
     this.carritoService.getCarrito(username).subscribe(
       (data) => {
-        this.carrito = data.producto || [];
+        this.carrito = data.carrito || [];
         this.mensaje = data.mensaje;
         console.log(this.carrito);
         console.log(this.mensaje);
       }
     );
+  }
+
+  totalPrecioCarito() {
+    let suma = 0;
+    this.carrito.forEach(item=>{
+      suma += (item.cantidad * item.producto.precio)
+    });
+
+    return suma;
+  }
+
+  convertToMoney(numero: string | number){
+    let numeroStr = numero.toString();
+
+    let partes = numeroStr.split(".");
+
+    let parteEntera = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    let parteDecimal = "";
+    if (partes.length > 1) {
+      parteDecimal = "." + partes[1];
+    }
+
+    return "$ "+(parteEntera + parteDecimal).replaceAll(',',".");
+
   }
 
   orderListCarrito(property : string) : void {
@@ -86,7 +118,36 @@ export class CarritoComponent implements OnInit {
       }
     })
   }
+  accionCarrito(carrito: Carrito, accion: string){
+    if(carrito.cantidad == 0 && accion == "quitar"){
+      return;
+    }
+    this.carritoService.accionCarrito(carrito.id, this.user.email, accion).subscribe(res=>{
+      if(accion == "agregar"){
+        this.toastr.success("Se agrego " + carrito.producto.nombre + " al caritto");
+        this.carrito = this.carrito.map(x=>{
+          if(x.id == carrito.id){
+            x.cantidad++;
+          }
+          return x;
+        });
+      }
+      if(accion == "quitar"){
+        this.toastr.warning("Se quito " + carrito.producto.nombre + " del caritto");
 
+        this.carrito = this.carrito.map(x=>{
+          if(x.id == carrito.id){
 
-
+            x.cantidad--;
+            if(x.cantidad < 0){
+              x.cantidad = 0;
+            }
+          }
+          return x;
+        });
+      }
+    },err=>{
+      debugger;
+    });
+  }
 }

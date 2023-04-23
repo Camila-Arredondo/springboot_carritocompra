@@ -23,9 +23,9 @@
         <h5 class="card-title">{{producto.nombre}}</h5>
         <p class="card-text">{{producto.descripcion}}</p>
         <div class="d-flex justify-content-between align-items-center">
-          <button class="btn btn-secondary" (click)="null">-</button>
-          <h6>0</h6>
-          <button class="btn btn-secondary" (click)="null">+</button>
+          <button class="btn btn-secondary" (click)="accionProducto(producto,  'quitar')">-</button>
+          <h6>{{producto.cantidad}}</h6>
+          <button class="btn btn-secondary" (click)="accionProducto(producto, 'agregar')">+</button>
 
         </div>
         <div class="mt-2 d-flex justify-content-between w-100">

@@ -22,6 +22,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment } from 'src/environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -50,6 +53,9 @@ import { environment } from 'src/environments/environment';
     NgxMaskDirective,
     NgxMaskPipe,
     AuthModule.forRoot(environment.auth0),
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(), // ToastrModule added
+
 
   ],
   providers: [provideNgxMask()],

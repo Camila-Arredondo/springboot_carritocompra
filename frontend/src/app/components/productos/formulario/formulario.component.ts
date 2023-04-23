@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { CategoriasService } from 'src/app/services/categorias.service';
 import { Categoria } from 'src/app/services/categorias';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
   selector: 'app-formulario',
@@ -24,6 +25,7 @@ export class FormularioComponent implements OnInit{
   imagenPreview = "";
   fileSelected?: any;
   submitted : boolean = false;
+  user : any = {};
 
   form: FormGroup = new FormGroup({
 
@@ -41,12 +43,16 @@ export class FormularioComponent implements OnInit{
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private categoriaService: CategoriasService,
-    private sant: DomSanitizer
-  ) { }
+    private sant: DomSanitizer,
+    private auth: AuthService
+    ) { }
 
 ngOnInit(): void {
-  this.getProducto();
-  this.getCategoria();
+  this.auth.user$.subscribe((success: any) => {
+    this.user = success;
+    this.getProducto(success.email);
+    this.getCategoria();
+  });
   this.form = this.formBuilder.group(
     {
       foto : [
@@ -137,11 +143,11 @@ createProducto() : void {
   );
 }
 
-getProducto(): void {
+getProducto(username: string): void {
   this.activatedRoute.params.subscribe(params => {
     let id = params['id'];
     if(id){
-      this.productoService.getProducto(id).subscribe(
+      this.productoService.getProducto(id, username).subscribe(
         (producto) => {
           this.producto = {
             ...producto,

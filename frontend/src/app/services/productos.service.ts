@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Observable, catchError, throwError, map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Productos } from './productos';
+import { AuthService } from '@auth0/auth0-angular';
+import { CarritoService } from './carrito.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +16,14 @@ export class ProductosService {
 
   private httpHeaders = new HttpHeaders({'Content-type': 'application/json'})
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, ) { }
 
-  getProductos(): Observable<any> {
-    return this.http.get<any>(this.urlEndPoint).pipe(
+  getProductos(username: string): Observable<any> {
+    return this.http.get<any>(this.urlEndPoint, {
+      headers: {
+        "username": username
+      }
+    }).pipe(
       catchError(e => {
         this.router.navigate([`/productos`]);
         console.error(e.error.mensaje);
@@ -29,8 +35,12 @@ export class ProductosService {
     );
   }
 
-  getProducto(id: number): Observable<any> {
-    return this.http.get<any>(`${this.urlEndPoint}/${id}`).pipe(
+  getProducto(id: number, username: string): Observable<any> {
+    return this.http.get<any>(`${this.urlEndPoint}/${id}`, {
+      headers: {
+        "username": username
+      }
+    }).pipe(
       catchError(e => {
         this.router.navigate([`/productos`]);
         console.error(e.error.mensaje);
@@ -92,5 +102,7 @@ export class ProductosService {
       })
     );
   }
+
+
 
 }

@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 import { faTriangleExclamation, faPenSquare, faTrashCan, faUserPlus, faPenToSquare, faCartPlus, faPlus, faEraser, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { ToastrService } from 'ngx-toastr';
+import { CarritoService } from 'src/app/services/carrito.service';
 import { Productos } from 'src/app/services/productos';
 import { ProductosService } from 'src/app/services/productos.service';
 import swal from 'sweetalert2';
@@ -21,17 +24,24 @@ export class ProductosComponent implements OnInit{
   faPlus = faPlus;
   faEraser = faEraser;
   faMinus = faMinus;
+  user : any = {};
 
   optionSort: { property: string | null, order : string } = { property : null, order : 'asc' };
 
-  constructor(private productoService: ProductosService) {}
+  constructor(private productoService: ProductosService, private auth: AuthService, private carritoService: CarritoService, private toastr: ToastrService) {}
 
 ngOnInit(): void {
-  this.getProductos();
+  this.auth.user$.subscribe((success: any) => {
+    console.log(success);
+    this.user = success;
+    this.getProductos(success.email);
+  })
+
+
 }
 
-getProductos() : void {
-  this.productoService.getProductos().subscribe(
+getProductos(username: string) : void {
+  this.productoService.getProductos(username).subscribe(
     (data) => {
       this.productos = data.producto || [];
       this.mensaje = data.mensaje;
@@ -57,7 +67,7 @@ eliminarProducto(producto: Productos) : void {
     },
     buttonsStyling: false
   })
-  
+
   swalWithBootstrapButtons.fire({
     title: '¿Estás seguro?',
     text: `Deseas eliminar el producto ${producto.nombre} Esta acción no se puede revertir`,
@@ -77,9 +87,9 @@ eliminarProducto(producto: Productos) : void {
             'success'
           )
         }
-      )        
-    } 
-    else if (result.dismiss === swal.DismissReason.cancel) 
+      )
+    }
+    else if (result.dismiss === swal.DismissReason.cancel)
     {
       swalWithBootstrapButtons.fire(
         'Acción cancelada',
@@ -88,6 +98,38 @@ eliminarProducto(producto: Productos) : void {
       )
     }
   })
+}
+accionProducto(producto: Productos, accion: string){
+  if(producto.cantidad == 0 && accion == "quitar"){
+    return;
+  }
+  this.carritoService.accionCarrito(producto.id, this.user.email, accion).subscribe(res=>{
+    if(accion == "agregar"){
+      this.toastr.success("Se agrego " + producto.nombre + " al caritto");
+      this.productos = this.productos.map(x=>{
+        if(x.id == producto.id){
+          x.cantidad++;
+        }
+        return x;
+      });
+    }
+    if(accion == "quitar"){
+      this.toastr.warning("Se quito " + producto.nombre + " del caritto");
+
+      this.productos = this.productos.map(x=>{
+        if(x.id == producto.id){
+
+          x.cantidad--;
+          if(x.cantidad < 0){
+            x.cantidad = 0;
+          }
+        }
+        return x;
+      });
+    }
+  },err=>{
+    debugger;
+  });
 }
 
 }

@@ -7,6 +7,7 @@ import { Productos } from 'src/app/services/productos';
 import { ProductosService } from 'src/app/services/productos.service';
 import swal from 'sweetalert2';
 import jwt_decode from "jwt-decode";
+import { ValorescompartidosService } from 'src/app/services/valorescompartidos.service';
 
 @Component({
   selector: 'app-productos',
@@ -26,10 +27,11 @@ export class ProductosComponent implements OnInit{
   faEraser = faEraser;
   faMinus = faMinus;
   user : any = {};
+  cantidadProductos = 0;
 
   optionSort: { property: string | null, order : string } = { property : null, order : 'asc' };
 
-  constructor(private productoService: ProductosService, private auth: AuthService, private carritoService: CarritoService, private toastr: ToastrService) {}
+  constructor(private productoService: ProductosService, private auth: AuthService, private carritoService: CarritoService, private toastr: ToastrService, private valorescompartidossvc: ValorescompartidosService) {}
 
 ngOnInit(): void {
 
@@ -48,6 +50,12 @@ getProductos(username: string) : void {
   this.productoService.getProductos(username).subscribe(
     (data) => {
       this.productos = data.producto || [];
+      this.productos.forEach(item => {
+          this.cantidadProductos += item.cantidad
+      });
+      this.valorescompartidossvc.setCantidad(this.cantidadProductos);
+
+
       this.mensaje = data.mensaje;
       console.log(this.productos);
       console.log(this.mensaje);
@@ -131,6 +139,10 @@ accionProducto(producto: Productos, accion: string){
         }
         return x;
       });
+      this.cantidadProductos = this.cantidadProductos + 1;
+      this.valorescompartidossvc.setCantidad(this.cantidadProductos);
+
+
     }
     if(accion == "quitar"){
       this.toastr.warning("Se quito " + producto.nombre + " del caritto");
@@ -145,9 +157,11 @@ accionProducto(producto: Productos, accion: string){
         }
         return x;
       });
+      this.cantidadProductos = this.cantidadProductos - 1;
+      this.valorescompartidossvc.setCantidad(this.cantidadProductos);
+
     }
   },err=>{
-    debugger;
   });
 }
 

@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 
 import swal from 'sweetalert2';
 import { faEraser, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { ValorescompartidosService } from 'src/app/services/valorescompartidos.service';
 
 @Component({
   selector: 'app-carrito',
@@ -24,7 +25,7 @@ export class CarritoComponent implements OnInit {
 
   optionSort: { property: string | null, order : string } = { property : null, order : 'asc' };
 
-  constructor(private carritoService: CarritoService, private auth: AuthService, private toastr: ToastrService) {}
+  constructor(private carritoService: CarritoService, private auth: AuthService, private toastr: ToastrService, private valorescompartidossvc: ValorescompartidosService) {}
 
   ngOnInit(): void {
     this.auth.user$.subscribe((success: any) => {
@@ -47,9 +48,13 @@ export class CarritoComponent implements OnInit {
 
   totalPrecioCarito() {
     let suma = 0;
+    let cantidad = 0;
     this.carrito.forEach(item=>{
-      suma += (item.cantidad * item.producto.precio)
+      suma += (item.cantidad * item.producto.precio);
+      cantidad += item.cantidad;
     });
+    this.valorescompartidossvc.setCantidad(cantidad);
+
 
     return suma;
   }

@@ -20,7 +20,8 @@ export class ProductosComponent implements OnInit{
 
   @Input() productos : Productos[] = [];
   TodosLosproductos : Productos[] = [];
-
+  productosPaginados : Productos[][] = [];
+  paginaSeleccionada: number = 0;
   @Input() categorias : Categoria[] = [];
 
   @Input() mensaje: string = '';
@@ -61,13 +62,39 @@ this.categoriaservice.getCategoria().subscribe(res=>{
 }
 BuscarProductoCategoria(categoriaId: number){
 if(categoriaId == -1){
-  this.productos = this.TodosLosproductos;
+  this.setPaginas(this.TodosLosproductos);
   return;
 }
+
+this.paginaSeleccionada = 0;
+
+
 this.productos = this.TodosLosproductos.filter(x=>{
  return  x.categoria.id == categoriaId;
 });
 
+this.setPaginas(this.productos);
+}
+
+
+setPaginas(productos: any[]){
+  this.productosPaginados = productos.reduce((grupos: Productos[][], producto: Productos, index: number) => {
+    const posicion = Math.floor(index / 6); // obtener la posición del grupo actual
+    if (!grupos[posicion]) grupos[posicion] = []; // crear un nuevo grupo si no existe
+
+    if (grupos[posicion].length < 6) {
+      grupos[posicion].push(producto); // agregar el producto al grupo actual si el tamaño es menor a 6
+    }
+
+    return grupos;
+  }, []);
+
+  this.productos = this.productosPaginados[0];
+}
+
+SetPagina(posicion: number) {
+  this.paginaSeleccionada = posicion;
+  this.productos = this.productosPaginados[posicion];
 }
 getProductos(username: string) : void {
   this.productoService.getProductos(username).subscribe(
@@ -77,6 +104,8 @@ getProductos(username: string) : void {
           this.cantidadProductos += item.cantidad
       });
       this.TodosLosproductos = this.productos;
+      this.setPaginas(this.TodosLosproductos);
+
       this.mensaje = data.mensaje;
       console.log(this.productos);
       console.log(this.mensaje);

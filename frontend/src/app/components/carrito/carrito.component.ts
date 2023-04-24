@@ -19,6 +19,7 @@ export class CarritoComponent implements OnInit {
   @Input() carrito : Carrito[] = [];
   @Input() mensaje: string = '';
   titulo : string = 'Productos Agregados';
+  finalizarcompra : boolean = false;
   faPlus = faPlus;
   faEraser = faEraser;
   faMinus = faMinus;
@@ -196,18 +197,8 @@ export class CarritoComponent implements OnInit {
 
   createVentas():void{
     if(this.carrito.length == 0) return;
+    this.finalizarcompra = !this.finalizarcompra;
 
-    this.ventasService.createVentas(this.user.email).subscribe(
-      ventas => {
-        this.valorescompartidossvc.setCantidad(0);
-        this.router.navigate(['/venta/'+ventas.nr_venta]);
-        Swal.fire({
-          icon: 'success',
-          title: 'Nueva venta registrada',
-          text: 'La venta ha sido registrado satisfactoriamente',
-        });
-      }
-    );
   }
 
 

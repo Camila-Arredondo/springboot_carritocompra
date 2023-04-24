@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { VentasComponent } from './components/ventas/ventas.component';
 import { VentaComponent } from './components/venta/venta.component';
+import { TarjetaCreditoComponent } from './components/tarjeta-credito/tarjeta-credito.component';
 
 
 @NgModule({
@@ -45,6 +46,7 @@ import { VentaComponent } from './components/venta/venta.component';
     OrderListPipe,
     VentasComponent,
     VentaComponent,
+    TarjetaCreditoComponent,
 
   ],
   imports: [

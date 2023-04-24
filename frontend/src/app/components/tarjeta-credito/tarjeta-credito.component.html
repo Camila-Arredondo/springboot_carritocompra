@@ -1,0 +1,75 @@
+<div class="container my-4">
+  <form [formGroup]="form">
+      <div class="card">
+
+        <div class="card-header">
+              <h3 class="card-title" >{{ titleCreate }}</h3>
+
+          </div>
+          <div style="margin-left:25px">
+              <div class="form-group row mb-3 mt-4 " >
+                  <label for="numerotarjeta" class="col-form-label col-sm-2 fw-bold">Número tarjeta de Crédito</label>
+                  <div class="col-sm-10">
+                      <input mask="0000 0000 0000 0000" type="text" class="form-control" name="nombre" id="numerotarjeta" formControlName="numerotarjeta" [(ngModel)]="tarjetaCredito.numerotarjeta" [ngClass]="{'is-invalid' : submitted && f['numerotarjeta'].errors}" placeholder="0000 0000 0000 0000" >
+                      <div *ngIf="submitted && f['numerotarjeta'].errors" class="invalid-feedback">
+                          <div *ngIf="f['numerotarjeta'].errors['required']">Debes ingresar un número de tarjeta.</div>
+                          <div *ngIf="f['numerotarjeta'].errors['minlength']">El numero de tarjeta debe tener 16 dígitos.</div>
+                          <div *ngIf="f['numerotarjeta'].errors['maxlength']">El producto ingresado excede el tamaño máximo permitido (16 dígitos).</div>
+                      </div>
+                  </div>
+              </div>
+
+
+              <div class="form-group row mb-3">
+                <label for="nombreapellido" class="col-form-label col-sm-2 fw-bold">Nombre y Apellido</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="nombreapellido" id="nombreapellido" formControlName="nombreapellido" [(ngModel)]="tarjetaCredito.nombreapellido" [ngClass]="{'is-invalid' : submitted && f['nombreapellido'].errors}" placeholder="Esteban Dido">
+                    <div *ngIf="submitted && f['nombreapellido'].errors" class="invalid-feedback">
+                        <div *ngIf="f['nombreapellido'].errors['required']">Debes ingresar el nombre y apellido de tu tarjeta.</div>
+                        <div *ngIf="f['nombreapellido'].errors['minlength']">Debes de ingresar un nombre más completo.</div>
+                        <div *ngIf="f['nombreapellido'].errors['maxlength']">El nombre y apellido tiene un límite de 50 caráteres.</div>
+                    </div>
+                </div>
+            </div>
+
+              <div class="form-group row mb-3">
+                  <label for="fechavencimiento" class="col-form-label col-sm-2 fw-bold">Fecha de Vencimiento</label>
+                  <div class="col-sm-10">
+                      <input mask="00/00" type="text" class="form-control" name="fechavencimiento" id="fechavencimiento" formControlName="fechavencimiento" [(ngModel)]="tarjetaCredito.fechavencimiento" [ngClass]="{'is-invalid' : submitted && f['fechavencimiento'].errors}"placeholder= "MM/AA">
+                      <div *ngIf="submitted && f['fechavencimiento'].errors" class="invalid-feedback">
+                          <div *ngIf="f['fechavencimiento'].errors['required']">Debes ingresar la fecha de vecimiento de su tarjeta.</div>
+                          <div *ngIf="f['fechavencimiento'].errors['minlength']">La fecha de vencimiento es en el siguiente formato MM/AA</div>
+                          <div *ngIf="f['fechavencimiento'].errors['maxlength']">La fecha de vencimiento es en el siguiente formato MM/AA</div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="form-group row mb-3">
+                <label for="cvv" class="col-form-label col-sm-2 fw-bold">CVV</label>
+                <div class="col-sm-10">
+                    <input mask="000" type="text" class="form-control" name="cvv" id="cvv" formControlName="cvv" [(ngModel)]="tarjetaCredito.cvv" [ngClass]="{'is-invalid' : submitted && f['cvv'].errors}" placeholder= "111">
+                    <div *ngIf="submitted && f['cvv'].errors" class="invalid-feedback">
+                        <div *ngIf="f['cvv'].errors['required']">Debes ingresar el CVV que se encuentra al inverso de su tarjeta.</div>
+                        <div *ngIf="f['cvv'].errors['minlength']">El CVV es de 3 números</div>
+                        <div *ngIf="f['cvv'].errors['maxlength']">El CVV es de 3 números</div>
+                    </div>
+                </div>
+            </div>
+
+
+          </div>
+
+          <div class="card-footer">
+            <div class="form-group row text-center">
+                <div class="col">
+                    <button  type="button" (click)="createVentas()" class="btn btn-lg btn-outline-primary m-2">Comprar</button>
+
+                </div>
+            </div>
+        </div>
+
+
+      </div>
+    </form>
+</div>
+

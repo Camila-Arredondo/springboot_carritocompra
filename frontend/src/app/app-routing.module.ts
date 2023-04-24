@@ -10,6 +10,7 @@ import { PerfilComponent } from './components/perfil/perfil.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { FormularioComponent } from './components/productos/formulario/formulario.component';
 import { VentaComponent } from './components/venta/venta.component';
+import { TarjetaCreditoComponent } from './components/tarjeta-credito/tarjeta-credito.component';
 
 
 
@@ -34,6 +35,9 @@ const routes: Routes = [
   },
   {
     path: 'nosotros', component: NosotrosComponent,
+  },
+  {
+    path: 'validaciontarjeta', component: TarjetaCreditoComponent,canActivate: [AuthGuard]
   },
   {
     path: 'carrito', component: CarritoComponent,canActivate: [AuthGuard]

@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-default ">
+
+    <nav class="navbar navbar-expand-lg navbar-default ">
     <div class="container-fluid">
         <a class="navbar-brand" href="home">
             <img class="img-nav" src="../../../assets/img/logo.png" alt="">
@@ -7,7 +8,6 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item" routerLinkActive="active">
@@ -17,46 +17,23 @@
                         <a class="nav-link text-white" routerLink="nosotros">Nosotros</a>
                     </li>
                     <li class="nav-item" routerLinkActive="active">
-                        <a class="nav-link" routerLink="productos">Productos</a>
+                        <a class="nav-link text-white" routerLink="productos">Productos</a>
                     </li>
-                    <!-- <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Buscar por categoría
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" target="_blank">Lácteos</a></li>
-                            <li><a class="dropdown-item" href="#">Cereales</a></li>
-                            <li><a class="dropdown-item" href="#">Confitería</a></li>
-                            <li><a class="dropdown-item" href="#">Bebidas</a></li>
-                        </ul>
-                    </li> -->
-
-                    <!-- <li class="nav-item me-4 mb-1" routerLinkActive="active">
-                        <a class="nav-link text-white" routerLink="perfil">Perfil</a>
-                    </li> -->
                 </ul>
-                <!--<form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success text-white" type="submit">Search</button>
-                </form>-->
                 <div routerLink="carrito" class="d-flex align-items-center " style="cursor: pointer; margin-right:10px">
-                  <fa-icon class="fa-2x mr-2 text-primary" [icon]="faShoppingCart" style="text-shadow: 2px 2px #f8f9fa;"></fa-icon>
-                  <span class="badge badge-danger rounded-circle" style="font-size: 0.8rem; width: 24px; height: 24px;">{{ cantidadCarrito }}</span>
+                  <fa-icon class="fa-2x mr-2 text-primary background-color-white" [icon]="faShoppingCart" style="text-shadow: 2px 2px #f8f9fa;"></fa-icon>
+                  <span class="badge badge-danger rounded-circle" style="font-size: 0.8rem; width: 24px; height: 24px;">{{cantidadCarrito}} </span>
                 </div>
                 <li class="nav-item" style=" list-style-type: none;">
-                  <a class="btn btn-outline-primary m-2" [routerLink]="['/perfil']" *ngIf="isAuthenticated">Perfil</a>
+                  <a class="btn btn-success m-2" [routerLink]="['/perfil']" *ngIf="isAuthenticated">Perfil</a>
               </li>
                 <li class="nav-item" style=" list-style-type: none;">
-                  <a class="btn btn-outline-danger m-2" (click)="logout()" *ngIf="isAuthenticated">Cerrar Sesión</a>
+                  <a class="btn btn-danger m-2" (click)="logout()" *ngIf="isAuthenticated">Cerrar Sesión</a>
                 </li>
                 <div class="me-4 mb-1 text-white">
                     <p>La fecha actual es:</p>
-                    <p *ngIf="horaActual">{{ horaActual | date:'dd-MM-yyyy HH:mm:ss' }}</p>
+                    <p *ngIf="horaActual">{{horaActual | date:'dd-MM-yyyy HH:mm:ss'}} </p>
                   </div>
-
             </div>
-
-
     </div>
 </nav>

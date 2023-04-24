@@ -8,6 +8,7 @@
 </div>
 
 <div class="container mt-4 table-responsive">
+  <button (click)="LimpiarCarrito()" class="btn btn-danger"><fa-icon [icon]="faTrash"></fa-icon> Limpiar carrito</button>
     <div class="row mt-4">
       <div class="card col-lg-6 img-card">
       </div>
@@ -35,7 +36,7 @@
                     <td>
                     <button class="btn btn-warning" (click)="accionCarrito(producto, 'quitar')"><fa-icon [icon]="faMinus"></fa-icon></button>
                     <button class="btn btn-success" (click)="accionCarrito(producto, 'agregar')"><fa-icon [icon]="faPlus"></fa-icon></button>
-                    <button class="btn btn-danger" (click)="accionCarrito(producto, 'agregar')"><fa-icon [icon]="faEraser"></fa-icon></button>
+                    <button class="btn btn-danger" (click)="eliminarCarrito(producto)"><fa-icon [icon]="faEraser"></fa-icon></button>
 
                     </td>
                 </tr>
@@ -47,7 +48,7 @@
                 <h5>TOTAL: {{convertToMoney(totalPrecioCarito())}}</h5>
             </tr>
         </table>
-        <a [routerLink]="['/productos']" class="btn btn-success">Comprar</a>
+        <button class="btn btn-success" (click)="createVentas()">Comprar</button>
     </div>
 
     </div>

@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, catchError, throwError, map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Productos } from './productos';
-import { AuthService } from '@auth0/auth0-angular';
-import { CarritoService } from './carrito.service';
+
 
 @Injectable({
   providedIn: 'root'

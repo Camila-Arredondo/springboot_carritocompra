@@ -116,7 +116,6 @@ convertFileToBase64(): void {
 
 onSubmit() : void {
   this.submitted = true;
-  debugger;
   if(this.form.invalid){
     return;
   }
@@ -129,7 +128,6 @@ onReset(): void {
 }
 
 createProducto() : void {
-  debugger;
   this.productoService.createProducto(this.producto).subscribe(
     producto => {
       console.log(producto);

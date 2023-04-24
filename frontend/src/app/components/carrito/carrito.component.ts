@@ -3,10 +3,12 @@ import { AuthService } from '@auth0/auth0-angular';
 import { Carrito } from 'src/app/services/carrito';
 import { CarritoService } from 'src/app/services/carrito.service';
 import { ToastrService } from 'ngx-toastr';
-
+import Swal from 'sweetalert2';
+import { ActivatedRoute, Router } from '@angular/router';
 import swal from 'sweetalert2';
-import { faEraser, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEraser, faMinus, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ValorescompartidosService } from 'src/app/services/valorescompartidos.service';
+import { VentasService } from 'src/app/services/ventas.service';
 
 @Component({
   selector: 'app-carrito',
@@ -20,12 +22,19 @@ export class CarritoComponent implements OnInit {
   faPlus = faPlus;
   faEraser = faEraser;
   faMinus = faMinus;
-
+  faTrash = faTrash;
   user : any = {};
 
   optionSort: { property: string | null, order : string } = { property : null, order : 'asc' };
 
-  constructor(private carritoService: CarritoService, private auth: AuthService, private toastr: ToastrService, private valorescompartidossvc: ValorescompartidosService) {}
+  constructor(
+    private carritoService: CarritoService,
+    private auth: AuthService,
+    private toastr: ToastrService,
+    private valorescompartidossvc: ValorescompartidosService,
+    private ventasService: VentasService,
+    private router: Router
+    ) {}
 
   ngOnInit(): void {
     this.auth.user$.subscribe((success: any) => {
@@ -45,7 +54,35 @@ export class CarritoComponent implements OnInit {
       }
     );
   }
+  LimpiarCarrito(){
+    if(this.carrito.length == 0) return;
+    const swalWithBootstrapButtons = swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success m-2',
+        cancelButton: 'btn btn-danger m-2'
+      },
+      buttonsStyling: false
+    })
+    swalWithBootstrapButtons.fire({
+      title: '¿Estás seguro?',
+      text: `¿Desea limpiar el carrito y perder su lista de compras? Esta acción no se puede revertir`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.carritoService.limpiarCarrito(this.user.email).subscribe(res=>{
+          this.valorescompartidossvc.setCantidad(0);
+          this.carrito = [];
+        });
 
+      }});
+
+
+
+  }
   totalPrecioCarito() {
     let suma = 0;
     let cantidad = 0;
@@ -94,7 +131,7 @@ export class CarritoComponent implements OnInit {
 
     swalWithBootstrapButtons.fire({
       title: '¿Estás seguro?',
-      text: `Deseas eliminar el producto ${carrito.productoid} Esta acción no se puede revertir`,
+      text: `Deseas eliminar el producto ${carrito.producto.nombre} Esta acción no se puede revertir`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí',
@@ -102,7 +139,7 @@ export class CarritoComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.carritoService.accionCarrito (carrito.productoid,this.user.email,"eliminar" ).subscribe(
+        this.carritoService.accionCarrito (carrito.producto.id,this.user.email,"eliminar" ).subscribe(
           response => {
             this.carrito = this.carrito.filter(a => a != carrito)
             swalWithBootstrapButtons.fire(
@@ -127,7 +164,7 @@ export class CarritoComponent implements OnInit {
     if(carrito.cantidad == 0 && accion == "quitar"){
       return;
     }
-    this.carritoService.accionCarrito(carrito.id, this.user.email, accion).subscribe(res=>{
+    this.carritoService.accionCarrito(carrito.producto.id, this.user.email, accion).subscribe(res=>{
       if(accion == "agregar"){
         this.toastr.success("Se agrego " + carrito.producto.nombre + " al caritto");
         this.carrito = this.carrito.map(x=>{
@@ -150,9 +187,30 @@ export class CarritoComponent implements OnInit {
           }
           return x;
         });
+
+        this.carrito = this.carrito.filter(x=>x.cantidad > 0);
       }
     },err=>{
-      debugger;
     });
   }
+
+  createVentas():void{
+    if(this.carrito.length == 0) return;
+
+    this.ventasService.createVentas(this.user.email).subscribe(
+      ventas => {
+        this.valorescompartidossvc.setCantidad(0);
+        this.router.navigate(['/venta/'+ventas.nr_venta]);
+        Swal.fire({
+          icon: 'success',
+          title: 'Nueva venta registrada',
+          text: 'La venta ha sido registrado satisfactoriamente',
+        });
+      }
+    );
+  }
+
+
+
+
 }

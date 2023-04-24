@@ -8,6 +8,8 @@ import { ProductosService } from 'src/app/services/productos.service';
 import swal from 'sweetalert2';
 import jwt_decode from "jwt-decode";
 import { ValorescompartidosService } from 'src/app/services/valorescompartidos.service';
+import { Categoria } from 'src/app/services/carrito';
+import { CategoriasService } from 'src/app/services/categorias.service';
 
 @Component({
   selector: 'app-productos',
@@ -17,6 +19,10 @@ import { ValorescompartidosService } from 'src/app/services/valorescompartidos.s
 export class ProductosComponent implements OnInit{
 
   @Input() productos : Productos[] = [];
+  TodosLosproductos : Productos[] = [];
+
+  @Input() categorias : Categoria[] = [];
+
   @Input() mensaje: string = '';
   titulo : string = 'Productos disponibles';
   faExclamation = faTriangleExclamation;
@@ -31,12 +37,10 @@ export class ProductosComponent implements OnInit{
 
   optionSort: { property: string | null, order : string } = { property : null, order : 'asc' };
 
-  constructor(private productoService: ProductosService, private auth: AuthService, private carritoService: CarritoService, private toastr: ToastrService, private valorescompartidossvc: ValorescompartidosService) {}
+  constructor(private productoService: ProductosService, private auth: AuthService, private carritoService: CarritoService, private toastr: ToastrService, private valorescompartidossvc: ValorescompartidosService, private categoriaservice: CategoriasService) {}
 
 ngOnInit(): void {
-
-
-
+  this.getCategorias();
   this.auth.user$.subscribe((success: any) => {
     console.log(success);
     this.user = success;
@@ -46,6 +50,25 @@ ngOnInit(): void {
 
 }
 
+getCategorias() : void {
+this.categoriaservice.getCategoria().subscribe(res=>{
+  this.categorias = res.categoria;
+  this.categorias.push({
+    id: -1,
+    nombre: "Todos Los Productos"
+  });
+})
+}
+BuscarProductoCategoria(categoriaId: number){
+if(categoriaId == -1){
+  this.productos = this.TodosLosproductos;
+  return;
+}
+this.productos = this.TodosLosproductos.filter(x=>{
+ return  x.categoria.id == categoriaId;
+});
+
+}
 getProductos(username: string) : void {
   this.productoService.getProductos(username).subscribe(
     (data) => {
@@ -53,9 +76,7 @@ getProductos(username: string) : void {
       this.productos.forEach(item => {
           this.cantidadProductos += item.cantidad
       });
-      this.valorescompartidossvc.setCantidad(this.cantidadProductos);
-
-
+      this.TodosLosproductos = this.productos;
       this.mensaje = data.mensaje;
       console.log(this.productos);
       console.log(this.mensaje);

@@ -9,6 +9,8 @@ import { CarritoComponent } from './components/carrito/carrito.component';
 import { PerfilComponent } from './components/perfil/perfil.component';
 import { AuthGuard } from '@auth0/auth0-angular';
 import { FormularioComponent } from './components/productos/formulario/formulario.component';
+import { VentaComponent } from './components/venta/venta.component';
+
 
 
 const routes: Routes = [
@@ -38,6 +40,9 @@ const routes: Routes = [
   },
   {
     path: 'perfil', component: PerfilComponent,canActivate: [AuthGuard]
+  },
+  {
+    path: 'venta/:id', component: VentaComponent,canActivate: [AuthGuard]
   },
   {
     path: '404', component: Page404Component,

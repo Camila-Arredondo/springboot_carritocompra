@@ -15,7 +15,7 @@ import { Page404Component } from './components/page404/page404.component';
 import { FormularioComponent } from './components/productos/formulario/formulario.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderListPipe } from './pipes/order-list.pipe';
-import { CategoriaComponent } from './components/productos/categoria/categoria.component';
+
 
 import { HttpClientModule } from '@angular/common/http';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -25,6 +25,8 @@ import { environment } from 'src/environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
+import { VentasComponent } from './components/ventas/ventas.component';
+import { VentaComponent } from './components/venta/venta.component';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { ToastrModule } from 'ngx-toastr';
     Page404Component,
     FormularioComponent,
     OrderListPipe,
-    CategoriaComponent
+    VentasComponent,
+    VentaComponent,
+
   ],
   imports: [
     BrowserModule,

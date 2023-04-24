@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { interval } from 'rxjs';
 import { ValorescompartidosService } from 'src/app/services/valorescompartidos.service';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { CarritoService } from 'src/app/services/carrito.service';
 
 @Component({
   selector: 'app-header',
@@ -25,7 +26,8 @@ isAuthenticated: boolean = false;
     public auth: AuthService,
     private location: Location,
     private router: Router,
-    private valorescompartidossvc: ValorescompartidosService
+    private valorescompartidossvc: ValorescompartidosService,
+    private carritoService: CarritoService
   ) {
 
     const timer = interval(1000);
@@ -39,7 +41,18 @@ isAuthenticated: boolean = false;
   ngOnInit(): void {
     this.auth.isAuthenticated$.subscribe((success: boolean) => {
       this.isAuthenticated = success;
+
     })
+    this.auth.user$.subscribe((user: any)=>{
+      this.carritoService.getCarrito(user.email).subscribe(res=>{
+        let cantidad = 0;
+        res.carrito.forEach((item: any)=>{
+          cantidad+= item.cantidad;
+        });
+        this.valorescompartidossvc.setCantidad(cantidad);
+        this.cantidadCarrito = cantidad;
+      });
+    });
   }
 
   login(): void {

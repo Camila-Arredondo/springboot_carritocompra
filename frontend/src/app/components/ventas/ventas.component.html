@@ -1,0 +1,49 @@
+<div class="container my-4 bg-dark text-white py-3 rounded">
+  <div class="row">
+      <div class="col-md-6">
+          <h1>Mis Compras</h1>
+          <p>Actualmente usted ha realizado {{ventas.length}} compras</p>
+      </div>
+  </div>
+</div>
+
+<div class="container mt-4 table-responsive">
+    <div class="row mt-4">
+      <div class="card col-lg-6 img-card">
+      </div>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>NUMERO ORDEN</th>
+                    <th>Fecha de Compra</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let venta of ventas">
+                    <td>{{venta.id}}</td>
+                    <td>{{venta.fechaCreacion | date:'dd-MM-yyyy HH:mm:ss'}}</td>
+
+                    <td>
+                    <button class="btn btn-warning" [routerLink]="['/venta/'+venta.id]" ><fa-icon [icon]="faEye"></fa-icon></button>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+
+
+<ng-template #NoHayProductos>
+  <div class="container my-4 py-3 rounded">
+      <div class="card">
+          <div class="card-body text-center">
+              <h5 class="card-title">No se han realizado Compras</h5>
+          </div>
+      </div>
+  </div>
+</ng-template>

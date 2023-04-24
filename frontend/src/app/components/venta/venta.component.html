@@ -1,0 +1,61 @@
+
+<div class="container mt-4 table-responsive">
+  <div #ventahtml >
+    <div class="row mt-4" style="margin-left: 25px; margin-right: 25px;">
+      <div class="container my-4 bg-dark text-white py-3 rounded">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>Boleta {{venta?.venta?.id}}</h1>
+            </div>
+        </div>
+      </div>
+
+      <div class="card col-lg-6 img-card" style="margin-left: 25px; margin-right: 25px;">
+      </div>
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Categoria</th>
+                    <th>Descripcion</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                 <tr *ngFor="let producto of venta.detalleventa">
+                    <td>{{producto.producto.nombre}}</td>
+                    <td>{{producto.producto.categoria.nombre}}</td>
+                    <td>{{producto.producto.descripcion}}</td>
+                    <td>{{convertToMoney(producto.producto.precio)}}</td>
+                    <td>{{producto.cantidad}}</td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-right">
+        <table class="table table-bordered table-striped d-inline-block">
+            <tr>
+               <h5>TOTAL: {{convertToMoney(totalPrecioCarito())}}</h5>
+            </tr>
+        </table>
+    </div>
+
+    </div>
+  </div>
+
+    <button class="btn btn-success" (click)="imprimirPDF()">Imprimir</button>
+
+</div>
+
+<!--
+
+<ng-template #NoHayProductos>
+  <div class="container my-4 py-3 rounded">
+      <div class="card">
+          <div class="card-body text-center">
+              <h5 class="card-title">{{ mensaje }}</h5>
+          </div>
+      </div>
+  </div>
+</ng-template> -->

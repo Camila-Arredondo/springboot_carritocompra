@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,21 +38,23 @@ public class VentasRestController {
 	private iTotalCompraService totalcompraService;
 
 
-	@PostMapping(value = {"/ventas"}, produces = "application/json")
-	public ResponseEntity<?> ObtenerVentas(@RequestBody Ventas ventas){
+	@GetMapping(value = {"/ventas"}, produces = "application/json")
+	public ResponseEntity<?> ObtenerVentas(@RequestHeader("username") String username){
 		Map<String, Object> response = new HashMap<>();
-		response.put("ventas", ventasService.findByUsuario(ventas.getUsuario()));
+		response.put("ventas", ventasService.findByUsuario(username));
 		
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 	}
 
 	
-	@PostMapping(value = "/ventas/{id}", produces = "application/json")
-	public ResponseEntity<?> getVentasById(@PathVariable(value = "id", required = false) Long id, @RequestBody CrearVenta dataVenta){
+	@GetMapping(value = "/ventas/{id}", produces = "application/json")
+	public ResponseEntity<?> getVentasById(
+			@PathVariable(value = "id", required = true) Long id, 
+			@RequestHeader("username") String username){
 		Ventas ventas = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			ventas = ventasService.findByIdAndUsuario(id,dataVenta.getUsuario());
+			ventas = ventasService.findByIdAndUsuario(id,username);
 			var detalleVenta = totalcompraService.findByNumeroOrden(ventas.getId());
 			if(ventas == null) {
 				response.put("mensaje","La venta  ID: " + id + " no existen en la base de datos.");
@@ -70,18 +73,18 @@ public class VentasRestController {
 	}
 	
 	
-	@PostMapping(value = "/ventas/crear", produces = "application/json")
-	public ResponseEntity<Map<String, Object>> crearVenta(@RequestBody CrearVenta crearVenta) {
+	@PostMapping(value = "/ventas", produces = "application/json")
+	public ResponseEntity<Map<String, Object>> crearVenta (@RequestHeader("username") String username) {
 		Map<String, Object> response = new HashMap<>();
 		try {
 			
-			if (crearVenta.getUsuario() == null) {
-				var productosCarrito = carritoService.findByUser("usuario");
+			if (username == null) {
+				var productosCarrito = carritoService.findByUser(username);
 				response.put("mensaje", "No se puede generar una venta sin envio de forma correcta el usuario");
 				return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
 			  } 
 			
-			var carrito = carritoService.findByUser(crearVenta.getUsuario());
+			var carrito = carritoService.findByUser(username);
 			
 			if(carrito.size()== 0) {
 				response.put("mensaje", "No se puede generar una venta sin elementos en el carrito");
@@ -89,7 +92,7 @@ public class VentasRestController {
 			}
 		
 			int idVenta = totalcompraService.addTotales(carrito);
-			
+			carritoService.deleteAllByUsuario(username);
 			response.put("nr_venta", idVenta);
 			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 
@@ -97,12 +100,7 @@ public class VentasRestController {
 			response.put("mensaje", "Error al realizar la consulta");
 			response.put("error", ex.getMessage() + ": " + ex.getMostSpecificCause().getMessage());
 			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		
-		
-		
-		
+		}	
 	
 	}
 	

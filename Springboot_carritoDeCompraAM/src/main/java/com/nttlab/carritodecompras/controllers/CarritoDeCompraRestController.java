@@ -7,9 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,40 +34,45 @@ public class CarritoDeCompraRestController {
 	private iTotalCompraService totalcompraService;
 
 	
-	@PostMapping(value = {"/carrito"}, produces = "application/json")
-	public ResponseEntity<?> ObtenerCarrito(@RequestBody Carrito carrito){
+	@GetMapping(value = {"/carrito"}, produces = "application/json")
+	public ResponseEntity<?> ObtenerCarrito(@RequestHeader("username") String username){
 		
 		Map<String, Object> response = new HashMap<>();
-		response.put("carrito", carritoService.findByUser(carrito.getUsuario()));
+		response.put("carrito", carritoService.findByUser(username));
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 
 	}
 	
-	@PostMapping(value = {"/carrito/agregar"}, produces = "application/json")
-	public ResponseEntity<?> agregarProducto(@RequestBody Carrito carrito){
-		carritoService.addProduct(carrito.getProductoid(), carrito.getUsuario());
-		Map<String, Object> response = new HashMap<>();
-		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
-
-	}
-	@PostMapping(value = {"/carrito/quitar"}, produces = "application/json")
-	public ResponseEntity<?> quitarProducto(@RequestBody Carrito carrito){
-		carritoService.quitarProducto(carrito.getProductoid(), carrito.getUsuario());
+	@GetMapping(value = {"/carrito/{accion}/{id}"}, produces = "application/json")
+	public ResponseEntity<?> accionCarrito(
+			@PathVariable(value = "id", required = true) Long id,
+			@PathVariable(value = "accion", required = true) String accion,
+			@RequestHeader("username") String username
+			){
+		
+		
+		if(accion.equals("agregar")) {
+			carritoService.addProduct(id, username);
+		}else
+			if(accion.equals("quitar")) {
+			carritoService.quitarProducto(id, username);
+		}else
+			if(accion.equals("eliminar")) {
+			carritoService.eliminarProducto(id, username);
+		}else {
+			Map<String, Object> response = new HashMap<>();
+			response.put("mensaje", "Accion " + accion + " no soportada");
+			return new ResponseEntity<Map<String,Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		
 		Map<String, Object> response = new HashMap<>();
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 
 	}
 	
-	@PostMapping(value = {"/carrito/eliminar"}, produces = "application/json")
-	public ResponseEntity<?> eliminarProducto(@RequestBody Carrito carrito){
-		carritoService.eliminarProducto(carrito.getProductoid(), carrito.getUsuario());
-		Map<String, Object> response = new HashMap<>();
-		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
-
-	}
-	@PostMapping(value = {"/carrito/limpiarcarrito"}, produces = "application/json")
-	public ResponseEntity<?> limpiarCarrito(@RequestBody Carrito carrito){
-		carritoService.deleteAllByUsuario(carrito.getUsuario());
+	@DeleteMapping(value = {"/carrito"}, produces = "application/json")
+	public ResponseEntity<?> limpiarCarrito(@RequestHeader("username") String username){
+		carritoService.deleteAllByUsuario(username);
 		Map<String, Object> response = new HashMap<>();
 		return new ResponseEntity<Map<String,Object>>(response, HttpStatus.OK);
 

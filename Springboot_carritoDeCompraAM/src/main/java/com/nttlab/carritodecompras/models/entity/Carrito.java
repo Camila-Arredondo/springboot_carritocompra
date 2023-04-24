@@ -20,14 +20,11 @@ public class Carrito implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private double cantidad;
-   
     @Transient
 	private Integer productoid;
-    
-    
     private String usuario;
     
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "producto_id")
     private Producto producto;
     

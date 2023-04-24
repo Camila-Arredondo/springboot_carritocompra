@@ -11,6 +11,7 @@ import com.nttlab.carritodecompras.models.dao.iCarritoDAO;
 import com.nttlab.carritodecompras.models.dao.iProductoDAO;
 import com.nttlab.carritodecompras.models.dao.iUsuarioDAO;
 import com.nttlab.carritodecompras.models.entity.Carrito;
+import com.nttlab.carritodecompras.models.entity.Producto;
 import com.nttlab.carritodecompras.models.entity.Usuario;
 
 @Service
@@ -71,7 +72,7 @@ public class CarritoServiceImplement implements iCarritoService{
 		Carrito carritonuevo = null;
 		boolean existe = false;
 		for(var carrito : carritoActual) {
-			if(carrito.getProducto().equals(producto)) {
+			if(carrito.getProducto().getId().equals(producto.getId())) {
 				existe = true;
 				carritonuevo = carrito;
 				break;
@@ -112,6 +113,11 @@ public class CarritoServiceImplement implements iCarritoService{
 		
 	}
 
+	@Override
+	@Transactional
+	public void deleteAllByProducto(Producto producto) {
+		carritoDao.deleteAllByProducto(producto);
+	}
 	
 	
 	

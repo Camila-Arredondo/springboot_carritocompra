@@ -22,17 +22,14 @@ public class Ventas implements Serializable  {
     private Date fechaCreacion;
     
     public Ventas() {
-		
 	}
 
 	public Ventas(Date fechacreacion, String usuario){
-		
 		this.fechaCreacion =fechacreacion ;
 		this.usuario = usuario;
 	}
 
     private String usuario;
-
 
 
 	public String getUsuario() {
@@ -47,8 +44,6 @@ public class Ventas implements Serializable  {
 		return id;
 	}
 
-
-
 	public Date getFechaCreacion() {
 		return fechaCreacion;
 	}
@@ -57,8 +52,4 @@ public class Ventas implements Serializable  {
 		this.fechaCreacion = fechaCreacion;
 	}
 
-
-    
-    
-    
 }

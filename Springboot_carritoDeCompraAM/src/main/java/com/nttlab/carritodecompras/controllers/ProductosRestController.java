@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,16 +30,32 @@ import com.nttlab.carritodecompras.models.service.iProductoService;
 @CrossOrigin (origins = "*", allowedHeaders = "*")
 @RequestMapping(value = "/api")
 public class ProductosRestController {
+	@Autowired
+	private iCarritoService carritoSerice;
 
 	@Autowired
 	private iProductoService productoService;
 	
 	@GetMapping(value = {"/productos"}, produces = "application/json")
-	public ResponseEntity<?> getAllProducto(){
+	public ResponseEntity<?> getAllProducto(
+			@RequestHeader("username") String username
+			){
 		List<Producto> productos = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
+			
+			
+			var productosCarrito = carritoSerice.findByUser(username);
 			productos = productoService.findAll();
+
+			for(var producto: productos) {
+				for(var carrito: productosCarrito) {
+					if(producto.equals(carrito.getProducto())) {
+						 producto.setCantidad(carrito.getCantidad());
+					}
+				}
+			}
+			
 			if(productos.isEmpty()) {
 				response.put("mensaje", "No hay productos registrados en la base de datos");
 				response.put("producto", productos);
@@ -56,7 +73,7 @@ public class ProductosRestController {
 	}
 	
 	@GetMapping(value = "/productos/{id}", produces = "application/json")
-	public ResponseEntity<?> getAlumnoById(@PathVariable(value = "id", required = false) Long id){
+	public ResponseEntity<?> getAlumnoById(@PathVariable(value = "id", required = false) Long id, @RequestHeader("username") String username){
 		Producto productos = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -83,7 +100,9 @@ public class ProductosRestController {
 		if (producto == null) {
 			return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 		} else {
+			carritoSerice.deleteAllByProducto(producto);
 			productoService.deleteById(id);
+			
 			return new ResponseEntity<>(response, HttpStatus.OK);
 		}
 	}
